@@ -4,6 +4,7 @@ import Link from 'next/link';
 const ADMIN_LINKS = [
   { href: '/admin/users', label: 'Kullanıcılar' },
   { href: '/admin/moderation-events', label: 'İhlal defteri' },
+  { href: '/admin/rules', label: 'Yasaklı kelimeler' },
 ];
 
 export function AdminNav() {

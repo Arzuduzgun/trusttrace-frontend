@@ -2,7 +2,7 @@
 parametrelerine güvenli şekilde çeviriyor; özel karakterler bozulmuyor.*/
 import 'server-only';
 import { serverFetch } from '@/lib/api/server-fetch';
-import type { ModerationEvent, ModerationEventType } from './types';
+import type { ModerationEvent, ModerationEventType, ModerationRule } from './types';
 
 export function listModerationEvents(filter: {
   eventType?: ModerationEventType;
@@ -16,4 +16,8 @@ export function listModerationEvents(filter: {
     params.set('userId', filter.userId);
   }
   return serverFetch<ModerationEvent[]>(`/admin/moderation-events?${params.toString()}`);
+}
+
+export function listRules(): Promise<ModerationRule[]> {
+  return serverFetch<ModerationRule[]>('/admin/moderation-rules');
 }

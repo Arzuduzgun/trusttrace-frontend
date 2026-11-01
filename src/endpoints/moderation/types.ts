@@ -14,3 +14,15 @@ export interface ModerationEvent {
   payload: Record<string, unknown>;
   occurredAt: string;
 }
+
+export type RuleAction = 'FLAG' | 'BLOCK';
+export type RuleMatchType = 'WORD' | 'PHRASE';
+
+export interface ModerationRule {
+  id: string;
+  pattern: string;
+  matchType: RuleMatchType;
+  action: RuleAction;
+  isActive: boolean;
+  createdAt: string;
+}
