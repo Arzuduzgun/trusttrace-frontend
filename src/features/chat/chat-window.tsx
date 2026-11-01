@@ -20,9 +20,10 @@ interface ChatWindowProps {
   room: Room;
   currentUser: { id: string; displayName: string };
   initialMessages: ChatMessage[];
+  readOnly?: boolean;
 }
 
-export function ChatWindow({ room, currentUser, initialMessages }: ChatWindowProps) {
+export function ChatWindow({ room, currentUser, initialMessages, readOnly = false }: ChatWindowProps) {
   const [notice, setNotice] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +66,13 @@ export function ChatWindow({ room, currentUser, initialMessages }: ChatWindowPro
         ))}
         <div ref={bottomRef} />
       </div>
-      <Composer onSend={send} disabled={connection !== 'connected'} />
+      {readOnly ? (
+        <p className="border-t p-3 text-center text-xs text-muted-foreground">
+          Yönetici görünümü — salt okunur
+        </p>
+      ) : (
+        <Composer onSend={send} disabled={connection !== 'connected'} />
+      )}
     </div>
   );
 }

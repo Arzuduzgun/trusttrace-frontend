@@ -4,6 +4,7 @@ import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { describeEvent } from './describe-event';
 import { RevokeForm } from './revoke-form';
+import Link from 'next/dist/client/link';
 
 const TYPE_LABELS: Record<ModerationEventType, { text: string; className: string }> = {
   VIOLATION_DETECTED: { text: 'İhlal', className: 'bg-red-100 text-red-800' },
@@ -54,7 +55,14 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
                 <td className="p-2">
                   {event.actorType === 'SYSTEM' || !event.actorId ? 'Sistem' : nameOf(event.actorId)}
                 </td>
-                <td className="p-2">{describeEvent(event)}</td>
+                <td className="p-2">
+                  <div>{describeEvent(event)}</div>
+                  {event.roomId && (
+                    <Link href={`/admin/conversations/${event.roomId}`} className="text-xs underline">
+                      konuşmada gör
+                    </Link>
+                  )}
+                </td>
                 <td className="p-2">
                   {canRevoke && <RevokeForm userId={event.subjectUserId} eventId={event.id} />}
                 </td>

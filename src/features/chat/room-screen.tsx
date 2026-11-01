@@ -10,9 +10,10 @@ interface RoomScreenProps {
   roomId: string;
   user: SessionUser;
   backHref: string;
+  readOnly?: boolean;
 }
 
-export async function RoomScreen({ roomId, user, backHref }: RoomScreenProps) {
+export async function RoomScreen({ roomId, user, backHref, readOnly = false }: RoomScreenProps) {
   const rooms = await listMyRooms();
   const room = rooms.find((candidate) => candidate.id === roomId);
   if (!room) {
@@ -29,6 +30,7 @@ export async function RoomScreen({ roomId, user, backHref }: RoomScreenProps) {
         room={room}
         currentUser={{ id: user.id, displayName: user.displayName }}
         initialMessages={[...history].reverse()}
+        readOnly={readOnly}
       />
     </div>
   );

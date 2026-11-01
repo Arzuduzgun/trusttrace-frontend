@@ -5,6 +5,7 @@ const ADMIN_LINKS = [
   { href: '/admin/users', label: 'Kullanıcılar' },
   { href: '/admin/moderation-events', label: 'İhlal defteri' },
   { href: '/admin/rules', label: 'Yasaklı kelimeler' },
+  { href: '/admin/conversations', label: 'Konuşmalar' },
 ];
 
 export function AdminNav() {
