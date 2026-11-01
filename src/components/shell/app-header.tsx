@@ -1,11 +1,6 @@
-import type { SessionUser, UserRole } from '@/endpoints/auth/types';
+import type { SessionUser } from '@/endpoints/auth/types';
 import { LogoutButton } from './logout-button';
-
-const ROLE_LABELS: Record<UserRole, string> = {
-  CUSTOMER: 'Müşteri',
-  AGENT: 'Temsilci',
-  ADMIN: 'Yönetici',
-};
+import { ROLE_LABELS } from '@/lib/labels';
 
 export function AppHeader({ user }: { user: SessionUser }) {
   return (
