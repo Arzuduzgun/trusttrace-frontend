@@ -2,6 +2,7 @@ import { FilterTabs } from '@/components/filter-tabs';
 import type { UserStatus } from '@/types/auth.types';
 import { listUsers } from '@/endpoints/users/queries';
 import { UsersTable } from '@/features/users/users-table';
+import { CreateAgentForm } from '@/features/users/create-agent-form';
 
 const STATUS_FILTERS: { label: string; value?: UserStatus }[] = [
   { label: 'Hepsi' },
@@ -21,6 +22,7 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
   return (
     <div className="space-y-4 p-6">
       <h1 className="text-xl font-semibold">Kullanıcılar</h1>
+      <CreateAgentForm />
       <FilterTabs
         tabs={STATUS_FILTERS.map((filter) => ({
           label: filter.label,

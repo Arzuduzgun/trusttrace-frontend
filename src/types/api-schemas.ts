@@ -21,3 +21,6 @@ export type ModerationRule = Schemas['RuleResponseDto'];
 
 export type ModerationEventType = Schemas['ModerationEventType'];
 export type ModerationEvent = Schemas['ModerationEventResponseDto'];
+
+export type RegisterRequest = Schemas['RegisterDto'];
+export type CreateAgentRequest = Schemas['CreateAgentDto'];

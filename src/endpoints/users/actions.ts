@@ -3,8 +3,10 @@
 
 import type { ActionResult } from '@/types/action-result.types';
 import { serverFetch } from '@/lib/api/server-fetch';
-import { reasonOnlySchema, suspendSchema } from './schemas';
+import { createAgentSchema, reasonOnlySchema, suspendSchema } from './schemas';
 import { runAction } from '@/lib/api/run-action';
+import { CreateAgentRequest } from '@/types/api-schemas';
+import { formText } from '@/lib/form-data';
 
 export async function suspendUserAction(
   userId: string,
@@ -58,5 +60,20 @@ export async function revokeSanctionAction(
       method: 'POST',
       body: JSON.stringify(parsed.data),
     }),
+  );
+}
+
+export async function createAgentAction(_previous: ActionResult, formData: FormData): Promise<ActionResult> {
+  const parsed = createAgentSchema.safeParse({
+    displayName: formText(formData, 'displayName'),
+    email: formText(formData, 'email'),
+    password: formText(formData, 'password'),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Geçersiz veri.', done: false };
+  }
+  const body: CreateAgentRequest = parsed.data;
+  return runAction(() =>
+    serverFetch<unknown>('/admin/agents', { method: 'POST', body: JSON.stringify(body) }),
   );
 }

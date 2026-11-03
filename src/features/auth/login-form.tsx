@@ -1,14 +1,18 @@
 'use client';
 
+import Link from 'next/link';
 import { useActionState } from 'react';
+import { FormField } from '@/components/form-field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { loginAction } from '@/endpoints/auth/actions';
 import type { LoginState } from '@/types/auth.types';
 
-const INITIAL_STATE: LoginState = { error: null, fieldErrors: {} };
+const INITIAL_STATE: LoginState = {
+  error: null,
+  fieldErrors: {},
+  values: { email: '' },
+};
 
 export function LoginForm({ notice }: { notice: string | null }) {
   const [state, formAction, isPending] = useActionState(loginAction, INITIAL_STATE);
@@ -24,20 +28,24 @@ export function LoginForm({ notice }: { notice: string | null }) {
           {notice && (
             <p className="rounded-md bg-amber-100 p-3 text-sm text-amber-900">{notice}</p>
           )}
-          <div className="space-y-2">
-            <Label htmlFor="email">E-posta</Label>
-            <Input id="email" name="email" type="email" autoComplete="email" required />
-            {state.fieldErrors.email && (
-              <p className="text-sm text-destructive">{state.fieldErrors.email[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Şifre</Label>
-            <Input id="password" name="password" type="password" autoComplete="current-password" required />
-            {state.fieldErrors.password && (
-              <p className="text-sm text-destructive">{state.fieldErrors.password[0]}</p>
-            )}
-          </div>
+          <FormField
+            key={state.values.email}
+            label="E-posta"
+            name="email"
+            type="email"
+            autoComplete="email"
+            defaultValue={state.values.email}
+            errors={state.fieldErrors.email}
+            required
+          />
+          <FormField
+            label="Şifre"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            errors={state.fieldErrors.password}
+            required
+          />
           {state.error && (
             <p className="text-sm text-destructive" role="alert">
               {state.error}
@@ -46,6 +54,12 @@ export function LoginForm({ notice }: { notice: string | null }) {
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? 'Giriş yapılıyor…' : 'Giriş yap'}
           </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            Hesabın yok mu?{' '}
+            <Link href="/register" className="underline">
+              Kayıt ol
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>

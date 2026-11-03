@@ -164,6 +164,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAgentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/rooms": {
         parameters: {
             query?: never;
@@ -416,6 +432,12 @@ export interface components {
         WsTicketResponseDto: {
             ticket: string;
             expiresIn: number;
+        };
+        CreateAgentDto: {
+            /** Format: email */
+            email: string;
+            password: string;
+            displayName: string;
         };
         /** @enum {string} */
         RoomType: "DIRECT" | "PRODUCT";
@@ -719,6 +741,33 @@ export interface operations {
                         /** @enum {boolean} */
                         success: true;
                         data: components["schemas"]["WsTicketResponseDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminAgentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAgentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["UserResponseDto"];
                     };
                 };
             };
