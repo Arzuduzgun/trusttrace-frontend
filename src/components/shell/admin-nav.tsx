@@ -1,4 +1,4 @@
-//Admin sayfalarının üstündeki menü: Kullanıcılar ve İhlal defteri.
+//Admin sayfalarının üstündeki menü.
 import Link from 'next/link';
 
 const ADMIN_LINKS = [

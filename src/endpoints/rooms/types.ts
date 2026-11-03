@@ -1,4 +1,3 @@
-//Odanın frontend’deki şekli. Backend’deki RoomResponseDto ile aynı.
 export type RoomType = 'DIRECT' | 'PRODUCT';
 export type RoomStatus = 'OPEN' | 'ESCALATED' | 'CLOSED';
 

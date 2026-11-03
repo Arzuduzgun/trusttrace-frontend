@@ -1,4 +1,3 @@
-//Parantezli klasörler adrese yansımaz. Sayfanın adresi /auth/login değil, sadece /login. Parantez sadece dosyaları düzenlemek için.
 import { LoginForm } from '@/features/auth/login-form';
 import { LOGIN_REASON_MESSAGES } from '@/features/auth/login-reasons';
 

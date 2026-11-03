@@ -1,7 +1,5 @@
-//Mesajın ve ceza bildiriminin frontend’deki şekli.
 export type MessageStatus = 'DELIVERED' | 'FLAGGED' | 'BLOCKED';
 
-//Backend’in gönderdiği mesaj. Hem REST’ten hem socket’ten aynı şekilde geliyor.
 export interface ChatMessage {
   id: string;
   roomId: string;
@@ -13,7 +11,6 @@ export interface ChatMessage {
   createdAt: string;
 }
 
-//Admin ceza verdiğinde socket’ten gelen bildirim.
 export interface SanctionNotice {
   sanction: 'SUSPEND' | 'BAN';
   reason: string;

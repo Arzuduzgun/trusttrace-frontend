@@ -1,4 +1,3 @@
-//Token cookie’lerini yazar, okur ve siler.
 import 'server-only';
 import { cookies } from 'next/headers';
 import { env } from '../env';

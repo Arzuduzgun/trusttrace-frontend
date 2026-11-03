@@ -1,4 +1,3 @@
-//Oda listesi. Her satır o odanın konuşma ekranına giden bir bağlantı.
 import Link from 'next/link';
 import type { Room, RoomType } from '@/endpoints/rooms/types';
 

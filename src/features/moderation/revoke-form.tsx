@@ -1,4 +1,3 @@
-//Defterdeki bir ceza kaydının yanındaki “Kaldır” formu.
 'use client';
 
 import { useActionState } from 'react';

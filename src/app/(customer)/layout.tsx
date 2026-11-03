@@ -1,4 +1,3 @@
-//Sadece müşteri girebilir. Bu grubun sayfaları /chat gibi adreslerde.
 import type { ReactNode } from 'react';
 import { AppHeader } from '@/components/shell/app-header';
 import { requireRole } from '@/lib/auth/session';

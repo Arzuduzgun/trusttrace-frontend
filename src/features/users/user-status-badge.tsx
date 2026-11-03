@@ -1,4 +1,3 @@
-//Yeşil “Aktif”, sarı “Askıda”, kırmızı “Banlı”. Askıdaysa altında bitiş zamanı ya da “süresiz” yazar.
 import type { UserStatus } from '@/endpoints/auth/types';
 import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';

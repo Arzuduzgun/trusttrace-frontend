@@ -1,4 +1,3 @@
-//“Yeni kural” formu
 'use client';
 
 import { useActionState } from 'react';

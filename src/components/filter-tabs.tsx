@@ -1,4 +1,4 @@
-//Tablonun üstündeki filtre düğmeleri, örneğin “Hepsi / Aktif / Askıda / Banlı”.
+//Tablonun üstündeki filtre düğmeleri.
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 

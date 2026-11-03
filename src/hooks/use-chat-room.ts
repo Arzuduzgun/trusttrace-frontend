@@ -1,5 +1,3 @@
-/*Konuşma ekranını yönetir. Socket bağlantısını yönetir, mesaj listesini tutar ve 
-mesaj gönderir.*/
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -8,15 +6,11 @@ import { getWsTicketAction } from '@/endpoints/auth/actions';
 import type { ChatMessage, MessageStatus, SanctionNotice } from '@/endpoints/messages/types';
 import { WS_URL } from '@/lib/public-env';
 
-/*Ekrandaki mesaj. Sunucudan gelen durumlara ek olarak iki yerel durum alabiliyor:
-PENDING: gönderiliyor, henüz onay gelmedi
-FAILED: gönderilemedi*/
 export interface ChatMessageView extends Omit<ChatMessage, 'status'> {
   status: MessageStatus | 'PENDING' | 'FAILED';
   errorMessage?: string;
 }
 
-//Bağlantının durumu: bağlanıyor, bağlı, koptu.
 export type ConnectionState = 'connecting' | 'connected' | 'disconnected';
 
 interface ChatRoomHandlers {
@@ -30,7 +24,6 @@ type SendAck =
 
 const ACK_TIMEOUT_MS = 5000;
 
-//Mesaj listede yoksa sona ekler, varsa yerine koyar.
 function upsert(list: ChatMessageView[], incoming: ChatMessageView): ChatMessageView[] {
   const index = list.findIndex(
     (message) =>

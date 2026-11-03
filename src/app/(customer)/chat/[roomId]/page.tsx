@@ -1,4 +1,4 @@
-//Müşterinin konuşma ekranı. Adresteki oda id’sini alır ve RoomScreen’e verir.
+//Müşterinin konuşma ekranı. Adresteki oda id’sini alır
 import { RoomScreen } from '@/features/chat/room-screen';
 import { requireRole } from '@/lib/auth/session';
 

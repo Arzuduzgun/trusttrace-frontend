@@ -1,4 +1,3 @@
-//Rol adlarının Türkçesi
 import type { UserRole } from '@/endpoints/auth/types';
 
 export const ROLE_LABELS: Record<UserRole, string> = {

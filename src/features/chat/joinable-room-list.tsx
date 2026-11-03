@@ -1,4 +1,3 @@
-//Müşterinin henüz katılmadığı ürün odaları; her birinin yanında bir Katıl butonu.
 import { Button } from '@/components/ui/button';
 import { joinProductRoomAction } from '@/endpoints/rooms/actions';
 import type { Room } from '@/endpoints/rooms/types';

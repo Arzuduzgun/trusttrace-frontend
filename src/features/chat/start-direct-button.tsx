@@ -1,4 +1,4 @@
-//“Temsilciyle özel görüş başlat” butonu. Basınca 1-1 oda açılır ve konuşma ekranına gidilir.
+//“Temsilciyle özel görüş başlat” butonu.
 import { Button } from '@/components/ui/button';
 import { startDirectRoomAction } from '@/endpoints/rooms/actions';
 

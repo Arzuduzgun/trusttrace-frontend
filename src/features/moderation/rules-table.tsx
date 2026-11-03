@@ -1,4 +1,3 @@
-//Kural tablosu. Sütunlar: kural, tür, eylem, durum ve bir Aç/Kapat butonu.
 import { Button } from '@/components/ui/button';
 import { toggleRuleAction } from '@/endpoints/moderation/actions';
 import type { ModerationRule, RuleAction } from '@/endpoints/moderation/types';

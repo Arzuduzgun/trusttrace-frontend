@@ -1,4 +1,3 @@
-//Login formunun kendisi. En üstteki 'use client', bu bileşenin tarayıcıda çalıştığını söylüyor; çünkü kullanıcı yazarken, butona basarken ekran güncelleniyor.
 'use client';
 
 import { useActionState } from 'react';
@@ -16,7 +15,7 @@ export function LoginForm({ notice }: { notice: string | null }) {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>TrustTrace</CardTitle>
+        <CardTitle className="text-2xl font-bold">TrustTrace</CardTitle>
         <CardDescription>Müşteri hizmetleri platformuna giriş</CardDescription>
       </CardHeader>
       <CardContent>

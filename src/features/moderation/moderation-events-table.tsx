@@ -1,4 +1,3 @@
-//Defter tablosu. Sütunlar: sıra no, zaman, tür, kullanıcı, işlemi yapan, detay, işlem.
 import type { ModerationEvent, ModerationEventType } from '@/endpoints/moderation/types';
 import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';

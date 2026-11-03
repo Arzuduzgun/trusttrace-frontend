@@ -1,6 +1,3 @@
-/*Tek bir mesaj balonu.
-Benim mesajım: sağda, koyu renkte.
-Başkasının mesajı: solda, açık renkte, üstünde gönderenin adı.*/
 import { cn } from '@/lib/utils';
 import type { ChatMessageView } from '@/hooks/use-chat-room';
 

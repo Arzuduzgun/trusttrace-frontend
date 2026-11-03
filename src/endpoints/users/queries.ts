@@ -1,4 +1,4 @@
-//Admin kullanıcı listesini backend’den çeker. Durum verilirse sadece o durumdakiler gelir.
+//Admin kullanıcı listesini backend’den çeker.
 import 'server-only';
 import type { SessionUser, UserStatus } from '@/endpoints/auth/types';
 import { serverFetch } from '@/lib/api/server-fetch';

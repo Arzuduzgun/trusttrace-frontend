@@ -1,4 +1,3 @@
-//Askıya alma ya da banlama formu. Hangisi olacağını mode parametresi belirliyor.
 'use client';
 
 import { useActionState } from 'react';

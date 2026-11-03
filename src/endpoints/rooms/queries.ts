@@ -1,4 +1,4 @@
-//Oda listelerini backend’den çeker. Sadece sunucuda çalışır (server-only).
+//Oda listelerini backend’den çeker.
 import 'server-only';
 import { serverFetch } from '@/lib/api/server-fetch';
 import type { Room } from './types';

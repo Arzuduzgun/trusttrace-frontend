@@ -1,4 +1,3 @@
-//Backend’e giden tek kapı. Frontend’deki bütün istekler buradan geçecek.
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import { redirect } from 'next/navigation';

@@ -1,7 +1,6 @@
 /*Oturum bittiğinde (banlandığında, token iptal edildiğinde) server-fetch kullanıcıyı 
 buraya gönderir. Cookie’leri siler ve kullanıcıyı, sebebi adreste yazarak login’e 
-gönderir. Örneğin /login?reason=AUTH_ACCOUNT_BANNED. Login sayfası bu sebebi okuyup 
-ekranda bir uyarı gösterecek.*/
+gönderir.*/
 import { NextResponse, type NextRequest } from 'next/server';
 import { clearTokens } from '@/lib/auth/cookies';
 

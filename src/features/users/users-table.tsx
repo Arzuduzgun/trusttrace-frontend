@@ -1,4 +1,3 @@
-//Kullanıcı tablosu. Sütunlar: kullanıcı (ad ve e-posta), rol, durum, işlemler.
 import Link from 'next/link';
 import type { SessionUser } from '@/endpoints/auth/types';
 import { ROLE_LABELS } from '@/lib/labels';

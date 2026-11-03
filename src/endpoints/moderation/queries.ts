@@ -1,5 +1,4 @@
-/*Defteri filtreleriyle birlikte çeker. URLSearchParams, filtreleri adres 
-parametrelerine güvenli şekilde çeviriyor; özel karakterler bozulmuyor.*/
+//Defteri filtreleriyle birlikte çeker. 
 import 'server-only';
 import { serverFetch } from '@/lib/api/server-fetch';
 import type { ModerationEvent, ModerationEventType, ModerationRule } from './types';

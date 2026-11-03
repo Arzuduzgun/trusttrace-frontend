@@ -1,5 +1,3 @@
-/*Admin formlarının ortak işi. Backend isteğini çalıştırır; hata olursa mesajını forma 
-döner; başarılıysa admin sayfalarını tazeler.*/
 import 'server-only';
 import { revalidatePath } from 'next/cache';
 import type { ActionResult } from './action-result';

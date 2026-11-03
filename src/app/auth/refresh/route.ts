@@ -1,7 +1,5 @@
 /*Access token’ın süresi dolunca server-fetch kullanıcıyı buraya gönderir.
-
 Cookie’deki refresh token ile backend’den yeni bir token çifti ister.
-Başarılıysa yeni token’ları cookie’ye yazar ve kullanıcıyı ana sayfasına gönderir.
 Başarısızsa (refresh token da ölmüşse) cookie’leri siler ve login’e gönderir.*/
 import { NextResponse, type NextRequest } from 'next/server';
 import type { AuthResult } from '@/endpoints/auth/types';

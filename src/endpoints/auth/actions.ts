@@ -1,6 +1,4 @@
-/*Login ve logout işlemleri. En üstteki 'use server', bu fonksiyonların 
-Next.js sunucusunda çalışacağını söylüyor. Form gönderilince tarayıcı bunları çağırır, 
-ama kod tarayıcıya hiç gönderilmez.*/
+//Login ve logout işlemleri.
 'use server';
 
 import { redirect } from 'next/navigation';
@@ -59,7 +57,6 @@ export async function logoutAction(): Promise<void> {
   redirect('/login');
 }
 
-//Next.js sunucusunda çalışıp cookie’deki token’la bileti alıyor ve sadece bileti tarayıcıya döndürüyor.
 export async function getWsTicketAction(): Promise<string> {
   const result = await serverFetch<{ ticket: string; expiresIn: number }>('/auth/ws-ticket', {
     method: 'POST',

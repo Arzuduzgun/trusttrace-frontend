@@ -1,4 +1,3 @@
-//Login sayfasına neden gelindiğini çevirir.
 export const LOGIN_REASON_MESSAGES: Record<string, string> = {
   AUTH_ACCOUNT_BANNED: 'Hesabınız kalıcı olarak kapatıldı.',
   AUTH_TOKEN_REVOKED: 'Oturumunuz sonlandırıldı, lütfen tekrar giriş yapın.',
