@@ -1,5 +1,5 @@
 import { FilterTabs } from '@/components/filter-tabs';
-import type { UserStatus } from '@/endpoints/auth/types';
+import type { UserStatus } from '@/types/auth.types';
 import { listUsers } from '@/endpoints/users/queries';
 import { UsersTable } from '@/features/users/users-table';
 

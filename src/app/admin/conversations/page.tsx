@@ -1,7 +1,7 @@
 //Bütün odaların listesi. Admin için GET /rooms bütün odaları döndürüyor.
 import { FilterTabs } from '@/components/filter-tabs';
 import { listMyRooms } from '@/endpoints/rooms/queries';
-import type { RoomType } from '@/endpoints/rooms/types';
+import type { RoomType } from '@/types/room.types';
 import { RoomList } from '@/features/chat/room-list';
 
 const TYPE_FILTERS: { label: string; value?: RoomType }[] = [

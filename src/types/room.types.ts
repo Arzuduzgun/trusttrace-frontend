@@ -1,0 +1,1 @@
+	export type { Room, RoomStatus, RoomType } from './api-schemas';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { SessionUser } from '@/endpoints/auth/types';
+import type { SessionUser } from '@/types/auth.types';
 import { ROLE_LABELS } from '@/lib/labels';
 import { SanctionForm } from './sanction-form';
 import { UserStatusBadge } from './user-status-badge';

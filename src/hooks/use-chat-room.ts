@@ -3,26 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { getWsTicketAction } from '@/endpoints/auth/actions';
-import type { ChatMessage, MessageStatus, SanctionNotice } from '@/endpoints/messages/types';
+import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
 import { WS_URL } from '@/lib/public-env';
-
-export interface ChatMessageView extends Omit<ChatMessage, 'status'> {
-  status: MessageStatus | 'PENDING' | 'FAILED';
-  errorMessage?: string;
-}
-
-export type ConnectionState = 'connecting' | 'connected' | 'disconnected';
-
-interface ChatRoomHandlers {
-  onSanctionApplied: (notice: SanctionNotice) => void;
-  onSanctionRevoked: () => void;
-}
-
-type SendAck =
-  | { ok: true; data: ChatMessage }
-  | { ok: false; error: { code: string; message: string } };
+import { ChatMessageView, ChatRoomHandlers, ConnectionState, SendAck } from '@/types/chat.types';
 
 const ACK_TIMEOUT_MS = 5000;
+
 
 function upsert(list: ChatMessageView[], incoming: ChatMessageView): ChatMessageView[] {
   const index = list.findIndex(

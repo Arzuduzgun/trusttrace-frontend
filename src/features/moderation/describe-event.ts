@@ -1,5 +1,5 @@
 //Bir defter kaydını tek satırlık, okunabilir bir cümleye çevirir.
-import type { ModerationEvent } from '@/endpoints/moderation/types';
+import type { ModerationEvent } from '@/types/moderation.types';
 import { formatDateTime } from '@/lib/format';
 
 const SANCTION_LABELS: Record<string, string> = { SUSPEND: 'Askı', BAN: 'Ban' };

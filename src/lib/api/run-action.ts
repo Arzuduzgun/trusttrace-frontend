@@ -1,6 +1,6 @@
 import 'server-only';
 import { revalidatePath } from 'next/cache';
-import type { ActionResult } from './action-result';
+import type { ActionResult } from '@/types/action-result.types';
 import { ApiError } from './api-error';
 
 export async function runAction(task: () => Promise<unknown>): Promise<ActionResult> {

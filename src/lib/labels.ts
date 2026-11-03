@@ -1,4 +1,4 @@
-import type { UserRole } from '@/endpoints/auth/types';
+import type { UserRole } from '@/types/auth.types';
 
 export const ROLE_LABELS: Record<UserRole, string> = {
   CUSTOMER: 'Müşteri',

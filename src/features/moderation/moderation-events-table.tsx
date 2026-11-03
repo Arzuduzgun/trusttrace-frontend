@@ -1,4 +1,4 @@
-import type { ModerationEvent, ModerationEventType } from '@/endpoints/moderation/types';
+import type { ModerationEvent, ModerationEventType } from '@/types/moderation.types';
 import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { describeEvent } from './describe-event';

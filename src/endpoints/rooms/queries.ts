@@ -1,7 +1,7 @@
 //Oda listelerini backend’den çeker.
 import 'server-only';
 import { serverFetch } from '@/lib/api/server-fetch';
-import type { Room } from './types';
+import type { Room } from '../../types/room.types';
 
 export function listMyRooms(): Promise<Room[]> {
   return serverFetch<Room[]>('/rooms');

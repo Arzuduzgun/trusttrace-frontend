@@ -1,6 +1,6 @@
 //Admin kullanıcı listesini backend’den çeker.
 import 'server-only';
-import type { SessionUser, UserStatus } from '@/endpoints/auth/types';
+import type { SessionUser, UserStatus } from '@/types/auth.types';
 import { serverFetch } from '@/lib/api/server-fetch';
 
 export function listUsers(status?: UserStatus): Promise<SessionUser[]> {

@@ -1,7 +1,7 @@
 //Defteri filtreleriyle birlikte çeker. 
 import 'server-only';
 import { serverFetch } from '@/lib/api/server-fetch';
-import type { ModerationEvent, ModerationEventType, ModerationRule } from './types';
+import type { ModerationEvent, ModerationEventType, ModerationRule } from '../../types/moderation.types';
 
 export function listModerationEvents(filter: {
   eventType?: ModerationEventType;

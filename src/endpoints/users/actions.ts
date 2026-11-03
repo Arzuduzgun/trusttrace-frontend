@@ -1,7 +1,7 @@
 //Üç ceza işlemi: askıya alma, banlama ve cezayı kaldırma.
 'use server';
 
-import type { ActionResult } from '@/lib/api/action-result';
+import type { ActionResult } from '@/types/action-result.types';
 import { serverFetch } from '@/lib/api/server-fetch';
 import { reasonOnlySchema, suspendSchema } from './schemas';
 import { runAction } from '@/lib/api/run-action';

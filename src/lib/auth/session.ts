@@ -1,7 +1,7 @@
 import 'server-only';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
-import type { SessionUser, UserRole } from '@/endpoints/auth/types';
+import type { SessionUser, UserRole } from '@/types/auth.types';
 import { serverFetch } from '../api/server-fetch';
 import { getAccessToken } from './cookies';
 import { ROLE_HOME } from './role-home';

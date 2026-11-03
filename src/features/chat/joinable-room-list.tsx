@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { joinProductRoomAction } from '@/endpoints/rooms/actions';
-import type { Room } from '@/endpoints/rooms/types';
+import type { Room } from '@/types/room.types';
 
 export function JoinableRoomList({ rooms }: { rooms: Room[] }) {
   return (

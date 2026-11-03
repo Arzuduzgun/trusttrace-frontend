@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { serverFetch } from '@/lib/api/server-fetch';
-import type { Room } from './types';
+import type { Room } from '../../types/room.types';
 
 export async function joinProductRoomAction(roomId: string): Promise<void> {
   await serverFetch<Room>(`/rooms/${roomId}/join`, { method: 'POST' });

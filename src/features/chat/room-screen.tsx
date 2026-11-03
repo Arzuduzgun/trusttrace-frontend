@@ -1,7 +1,7 @@
 //Konuşma sayfasının sunucu tarafı.
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { SessionUser } from '@/endpoints/auth/types';
+import type { SessionUser } from '@/types/auth.types';
 import { getMessageHistory } from '@/endpoints/messages/queries';
 import { listMyRooms } from '@/endpoints/rooms/queries';
 import { ChatWindow } from './chat-window';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { Room, RoomType } from '@/endpoints/rooms/types';
+import type { Room, RoomType } from '@/types/room.types';
 
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   DIRECT: 'Özel görüşme',

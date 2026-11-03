@@ -1,4 +1,4 @@
-import type { SessionUser } from '@/endpoints/auth/types';
+import type { SessionUser } from '@/types/auth.types';
 import { LogoutButton } from './logout-button';
 import { ROLE_LABELS } from '@/lib/labels';
 

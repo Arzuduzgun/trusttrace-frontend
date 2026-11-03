@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import type { ActionResult } from '@/lib/api/action-result';
+import type { ActionResult } from '@/types/action-result.types';
 import { runAction } from '@/lib/api/run-action';
 import { serverFetch } from '@/lib/api/server-fetch';
 import { createRuleSchema } from './schemas';

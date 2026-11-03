@@ -8,12 +8,9 @@ import { serverFetch, serverFetchVoid } from '@/lib/api/server-fetch';
 import { clearTokens, getRefreshToken, saveTokens } from '@/lib/auth/cookies';
 import { ROLE_HOME } from '@/lib/auth/role-home';
 import { loginSchema } from './schemas';
-import type { AuthResult } from './types';
+import type { AuthResult, LoginState, WsTicket } from '../../types/auth.types';
 
-export interface LoginState {
-  error: string | null;
-  fieldErrors: { email?: string[]; password?: string[] };
-}
+
 
 export async function loginAction(_previous: LoginState, formData: FormData): Promise<LoginState> {
   const parsed = loginSchema.safeParse({
@@ -58,7 +55,7 @@ export async function logoutAction(): Promise<void> {
 }
 
 export async function getWsTicketAction(): Promise<string> {
-  const result = await serverFetch<{ ticket: string; expiresIn: number }>('/auth/ws-ticket', {
+  const result = await serverFetch<WsTicket>('/auth/ws-ticket', {
     method: 'POST',
   });
   return result.ticket;

@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { getAccessToken } from '../auth/cookies';
 import { env } from '../env';
 import { ApiError } from './api-error';
-import type { ApiEnvelope } from './types';
+import type { ApiEnvelope } from '../../types/api-envelope.types';
 import { connection } from 'next/server';
 
 const SESSION_ENDED_CODES = new Set([

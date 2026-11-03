@@ -1,4 +1,4 @@
-import type { UserStatus } from '@/endpoints/auth/types';
+import type { UserStatus } from '@/types/auth.types';
 import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
 

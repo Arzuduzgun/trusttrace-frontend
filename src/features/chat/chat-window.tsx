@@ -2,9 +2,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { ChatMessage, SanctionNotice } from '@/endpoints/messages/types';
-import type { Room } from '@/endpoints/rooms/types';
-import { useChatRoom, type ConnectionState } from '@/hooks/use-chat-room';
+import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
+import type { Room } from '@/types/room.types';
+import { useChatRoom } from '@/hooks/use-chat-room';
+import type { ConnectionState } from '@/types/chat.types';
 import { cn } from '@/lib/utils';
 import { Composer } from './composer';
 import { MessageBubble } from './message-bubble';

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FilterTabs } from '@/components/filter-tabs';
 import { listModerationEvents } from '@/endpoints/moderation/queries';
-import type { ModerationEventType } from '@/endpoints/moderation/types';
+import type { ModerationEventType } from '@/types/moderation.types';
 import { listUsers } from '@/endpoints/users/queries';
 import { ModerationEventsTable } from '@/features/moderation/moderation-events-table';
 

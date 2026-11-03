@@ -1,15 +1,12 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { env } from '../env';
+import { TokenPair } from '@/types/auth.types';
 
 const ACCESS_COOKIE = 'tt_access';
 const REFRESH_COOKIE = 'tt_refresh';
 const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
 
-interface TokenPair {
-  accessToken: string;
-  refreshToken: string;
-}
 
 function cookieOptions() {
   return {

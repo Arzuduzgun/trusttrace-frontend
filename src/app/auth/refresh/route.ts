@@ -2,7 +2,7 @@
 Cookie’deki refresh token ile backend’den yeni bir token çifti ister.
 Başarısızsa (refresh token da ölmüşse) cookie’leri siler ve login’e gönderir.*/
 import { NextResponse, type NextRequest } from 'next/server';
-import type { AuthResult } from '@/endpoints/auth/types';
+import type { AuthResult } from '@/types/auth.types';
 import { ApiError } from '@/lib/api/api-error';
 import { serverFetch } from '@/lib/api/server-fetch';
 import { clearTokens, getRefreshToken, saveTokens } from '@/lib/auth/cookies';

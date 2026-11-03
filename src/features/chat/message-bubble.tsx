@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { ChatMessageView } from '@/hooks/use-chat-room';
+import type { ChatMessageView } from '@/types/chat.types';
 
 const STATUS_LABELS: Partial<Record<ChatMessageView['status'], { text: string; className: string }>> = {
   BLOCKED: { text: 'Engellendi — kimseye iletilmedi', className: 'bg-red-100 text-red-800' },

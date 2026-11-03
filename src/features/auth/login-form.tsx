@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { loginAction, type LoginState } from '@/endpoints/auth/actions';
+import { loginAction } from '@/endpoints/auth/actions';
+import type { LoginState } from '@/types/auth.types';
 
 const INITIAL_STATE: LoginState = { error: null, fieldErrors: {} };
 

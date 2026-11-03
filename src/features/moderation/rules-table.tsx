@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { toggleRuleAction } from '@/endpoints/moderation/actions';
-import type { ModerationRule, RuleAction } from '@/endpoints/moderation/types';
+import type { ModerationRule, RuleAction } from '@/types/moderation.types';
 import { cn } from '@/lib/utils';
 
 const ACTION_LABELS: Record<RuleAction, { text: string; className: string }> = {

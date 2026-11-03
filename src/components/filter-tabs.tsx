@@ -1,12 +1,7 @@
 //Tablonun üstündeki filtre düğmeleri.
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
-export interface FilterTab {
-  label: string;
-  href: string;
-  active: boolean;
-}
+import { FilterTab } from '@/types/ui.types';
 
 export function FilterTabs({ tabs }: { tabs: FilterTab[] }) {
   return (

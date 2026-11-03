@@ -1,4 +1,4 @@
-import type { ApiErrorBody } from './types';
+import type { ApiErrorBody } from '../../types/api-envelope.types';
 
 export class ApiError extends Error {
   readonly code: string;
