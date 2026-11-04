@@ -389,6 +389,16 @@ export interface components {
             /** Format: date-time */
             suspendedUntil: string | null;
         };
+        AdminUserResponseDto: {
+            role: components["schemas"]["UserRole"];
+            status: components["schemas"]["UserStatus"];
+            id: string;
+            email: string;
+            displayName: string;
+            /** Format: date-time */
+            suspendedUntil: string | null;
+            isOnline: boolean;
+        };
         /** @enum {string} */
         ModerationEventType: "VIOLATION_DETECTED" | "SANCTION_IMPOSED" | "SANCTION_REVOKED";
         /** @enum {string} */
@@ -600,7 +610,7 @@ export interface operations {
                     "application/json": {
                         /** @enum {boolean} */
                         success: true;
-                        data: components["schemas"]["UserResponseDto"][];
+                        data: components["schemas"]["AdminUserResponseDto"][];
                     };
                 };
             };

@@ -1,4 +1,4 @@
-export type { AuthResult, SessionUser, UserRole, UserStatus, WsTicket } from './api-schemas';
+export type { AuthResult, SessionUser, UserRole, UserStatus, WsTicket, AdminUser } from './api-schemas';
 
 export interface LoginState {
   error: string | null;

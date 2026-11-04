@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import type { SessionUser } from '@/types/auth.types';
+import type { AdminUser, SessionUser } from '@/types/auth.types';
 import { ROLE_LABELS } from '@/lib/labels';
 import { UserStatusBadge } from './user-status-badge';
 import { SanctionDialog } from './sanction-dialog';
+import { cn } from '@/lib/utils';
+
 
 function UserActions({ user }: { user: SessionUser }) {
   if (user.role === 'ADMIN') {
@@ -18,7 +20,7 @@ function UserActions({ user }: { user: SessionUser }) {
   );
 }
 
-export function UsersTable({ users }: { users: SessionUser[] }) {
+export function UsersTable({ users }: { users: AdminUser[] }) {
   if (users.length === 0) {
     return <p className="text-sm text-muted-foreground">Bu filtrede kullanıcı yok.</p>;
   }
@@ -37,7 +39,13 @@ export function UsersTable({ users }: { users: SessionUser[] }) {
           {users.map((user) => (
             <tr key={user.id} className="border-t align-top">
               <td className="p-2">
-                <div className="font-medium">{user.displayName}</div>
+                <div className="flex items-center gap-2 font-medium">
+                  <span
+                    className={cn('size-2 rounded-full', user.isOnline ? 'bg-green-500' : 'bg-muted-foreground/40')}
+                    title={user.isOnline ? 'Çevrimiçi' : 'Çevrimdışı'}
+                  />
+                  {user.displayName}
+                </div>
                 <div className="text-xs text-muted-foreground">{user.email}</div>
               </td>
               <td className="p-2">{ROLE_LABELS[user.role]}</td>
