@@ -1,8 +1,13 @@
-import { ChatMessage, MessageStatus, SanctionNotice } from "./messages.types";
+import { ChatMessage, SanctionNotice } from "./messages.types";
 
-export interface ChatMessageView extends Omit<ChatMessage, 'status'> {
-  status: MessageStatus | 'PENDING' | 'FAILED';
+export interface ChatMessageView extends ChatMessage {
   errorMessage?: string;
+}
+
+export interface MessageFailedEvent {
+  roomId: string;
+  clientMessageId: string;
+  reason: string;
 }
 
 export type ConnectionState = 'connecting' | 'connected' | 'disconnected';

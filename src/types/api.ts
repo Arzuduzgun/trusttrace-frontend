@@ -459,7 +459,7 @@ export interface components {
             userId: string;
         };
         /** @enum {string} */
-        MessageStatus: "DELIVERED" | "FLAGGED" | "BLOCKED";
+        MessageStatus: "PENDING" | "DELIVERED" | "FLAGGED" | "BLOCKED" | "FAILED";
         MessageResponseDto: {
             status: components["schemas"]["MessageStatus"];
             id: string;

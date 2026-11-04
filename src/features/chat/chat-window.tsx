@@ -28,7 +28,7 @@ export function ChatWindow({ room, currentUser, initialMessages, readOnly = fals
   const [notice, setNotice] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const { messages, connection, send } = useChatRoom(room.id, currentUser, initialMessages, {
+  const { messages, connection, send, retry } = useChatRoom(room.id, currentUser, initialMessages, {
     onSanctionApplied: (sanction: SanctionNotice) => {
       if (sanction.sanction === 'BAN') {
             void forceSignOutAction('AUTH_ACCOUNT_BANNED');
@@ -63,6 +63,7 @@ export function ChatWindow({ room, currentUser, initialMessages, readOnly = fals
             key={message.clientMessageId}
             message={message}
             isOwn={message.senderId === currentUser.id}
+            onRetry={() => retry(message)}
           />
         ))}
         <div ref={bottomRef} />

@@ -5,7 +5,7 @@ import { io, type Socket } from 'socket.io-client';
 import { getWsTicketAction } from '@/endpoints/auth/actions';
 import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
 import { WS_URL } from '@/lib/public-env';
-import { ChatMessageView, ChatRoomHandlers, ConnectionState, SendAck } from '@/types/chat.types';
+import { ChatMessageView, ChatRoomHandlers, ConnectionState, MessageFailedEvent, SendAck } from '@/types/chat.types';
 
 const ACK_TIMEOUT_MS = 5000;
 
@@ -36,6 +36,16 @@ export function useChatRoom(
     handlersRef.current = handlers;
   });
 
+  const markFailed = useCallback((clientMessageId: string, errorMessage: string) => {
+    setMessages((list) =>
+      list.map((message) =>
+        message.clientMessageId === clientMessageId
+          ? { ...message, status: 'FAILED', errorMessage }
+          : message,
+      ),
+    );
+  }, []);
+  
   useEffect(() => {
     const socket = io(WS_URL, {
       transports: ['websocket'],
@@ -58,6 +68,11 @@ export function useChatRoom(
         setMessages((list) => upsert(list, message));
       }
     });
+    socket.on('message:failed', (event: MessageFailedEvent) => {
+      if (event.roomId === roomId) {
+        markFailed(event.clientMessageId, event.reason);
+      }
+    });
     socket.on('sanction:applied', (notice: SanctionNotice) => {
       handlersRef.current.onSanctionApplied(notice);
     });
@@ -69,34 +84,10 @@ export function useChatRoom(
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [roomId]);
+  }, [roomId, markFailed]);
 
-  const markFailed = useCallback((clientMessageId: string, errorMessage: string) => {
-    setMessages((list) =>
-      list.map((message) =>
-        message.clientMessageId === clientMessageId
-          ? { ...message, status: 'FAILED', errorMessage }
-          : message,
-      ),
-    );
-  }, []);
-
-  const send = useCallback(
-    (body: string) => {
-      const clientMessageId = crypto.randomUUID();
-      setMessages((list) => [
-        ...list,
-        {
-          id: clientMessageId,
-          roomId,
-          senderId: currentUser.id,
-          senderName: currentUser.displayName,
-          body,
-          clientMessageId,
-          createdAt: new Date().toISOString(),
-          status: 'PENDING',
-        },
-      ]);
+  const emitMessage = useCallback(
+    (clientMessageId: string, body: string) => {
       const socket = socketRef.current;
       if (!socket?.connected) {
         markFailed(clientMessageId, 'Bağlantı yok.');
@@ -116,8 +107,43 @@ export function useChatRoom(
           }
         });
     },
-    [roomId, currentUser.id, currentUser.displayName, markFailed],
+    [roomId, markFailed],
   );
 
-  return { messages, connection, send };
+  const send = useCallback(
+    (body: string) => {
+      const clientMessageId = crypto.randomUUID();
+      setMessages((list) => [
+        ...list,
+        {
+          id: clientMessageId,
+          roomId,
+          senderId: currentUser.id,
+          senderName: currentUser.displayName,
+          body,
+          clientMessageId,
+          createdAt: new Date().toISOString(),
+          status: 'PENDING',
+        },
+      ]);
+      emitMessage(clientMessageId, body);
+    },
+    [roomId, currentUser.id, currentUser.displayName, emitMessage],
+  );
+
+  const retry = useCallback(
+    (message: ChatMessageView) => {
+      setMessages((list) =>
+        list.map((item) =>
+          item.clientMessageId === message.clientMessageId
+            ? { ...item, status: 'PENDING', errorMessage: undefined }
+            : item,
+        ),
+      );
+      emitMessage(message.clientMessageId, message.body);
+    },
+    [emitMessage],
+  );
+
+  return { messages, connection, send, retry };
 }

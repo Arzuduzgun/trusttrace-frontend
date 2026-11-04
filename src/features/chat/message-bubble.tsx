@@ -12,7 +12,15 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 }
 
-export function MessageBubble({ message, isOwn }: { message: ChatMessageView; isOwn: boolean }) {
+export function MessageBubble({
+  message,
+  isOwn,
+  onRetry,
+}: {
+  message: ChatMessageView;
+  isOwn: boolean;
+  onRetry?: () => void;
+}) {
   const label = STATUS_LABELS[message.status];
   return (
     <div className={cn('flex max-w-[75%] flex-col gap-1', isOwn ? 'items-end self-end' : 'items-start self-start')}>
@@ -33,6 +41,11 @@ export function MessageBubble({ message, isOwn }: { message: ChatMessageView; is
             {label.text}
             {message.errorMessage ? `: ${message.errorMessage}` : ''}
           </span>
+        )}
+        {isOwn && message.status === 'FAILED' && onRetry && (
+          <button type="button" onClick={onRetry} className="ml-2 underline">
+            Tekrar dene
+          </button>
         )}
       </span>
     </div>
