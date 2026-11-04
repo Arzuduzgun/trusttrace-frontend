@@ -1,22 +1,7 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { env } from '../env';
-import { TokenPair } from '@/types/auth.types';
-
-const ACCESS_COOKIE = 'tt_access';
-const REFRESH_COOKIE = 'tt_refresh';
-const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
-
-
-function cookieOptions() {
-  return {
-    httpOnly: true,
-    sameSite: 'lax' as const, //Başka sitelerden gelen form gönderimlerinde cookie gönderilmez
-    secure: env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  };
-}
+import type { TokenPair } from '@/types/auth.types';
+import { ACCESS_COOKIE, REFRESH_COOKIE, cookieOptions } from './cookie-config';
 
 export async function getAccessToken(): Promise<string | undefined> {
   return (await cookies()).get(ACCESS_COOKIE)?.value;

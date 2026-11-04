@@ -1,0 +1,1 @@
+export const CURRENT_PATH_HEADER = 'x-pathname';

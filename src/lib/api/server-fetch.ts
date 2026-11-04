@@ -6,6 +6,8 @@ import { env } from '../env';
 import { ApiError } from './api-error';
 import type { ApiEnvelope } from '../../types/api-envelope.types';
 import { connection } from 'next/server';
+import { CURRENT_PATH_HEADER } from '../request-headers';
+import { headers } from 'next/dist/server/request/headers';
 
 const SESSION_ENDED_CODES = new Set([
   'AUTH_TOKEN_MISSING',
@@ -36,9 +38,14 @@ async function toApiError(response: Response): Promise<ApiError> {
   return new ApiError(response.status, body.error);
 }
 
-function redirectIfSessionProblem(error: ApiError): void {
+async function refreshUrl(): Promise<string> {
+  const currentPath = (await headers()).get(CURRENT_PATH_HEADER);
+  return currentPath ? `/auth/refresh?next=${encodeURIComponent(currentPath)}` : '/auth/refresh';
+}
+
+async function redirectIfSessionProblem(error: ApiError): Promise<void> {
   if (error.code === 'AUTH_TOKEN_EXPIRED') {
-    redirect('/auth/refresh');
+    redirect(await refreshUrl());
   }
   if (SESSION_ENDED_CODES.has(error.code)) {
     redirect(`/auth/signout?reason=${error.code}`);
@@ -49,7 +56,7 @@ export async function serverFetch<T>(path: string, init: RequestInit = {}): Prom
   const response = await request(path, init);
   if (!response.ok) {
     const error = await toApiError(response);
-    redirectIfSessionProblem(error);
+    await redirectIfSessionProblem(error);
     throw error;
   }
   const body = (await response.json()) as ApiEnvelope<T>;
@@ -63,7 +70,7 @@ export async function serverFetchVoid(path: string, init: RequestInit = {}): Pro
   const response = await request(path, init);
   if (!response.ok) {
     const error = await toApiError(response);
-    redirectIfSessionProblem(error);
+    await redirectIfSessionProblem(error);
     throw error;
   }
 }
