@@ -1,9 +1,8 @@
-import type { ModerationEvent, ModerationEventType } from '@/types/moderation.types';
+import Link from 'next/link';
 import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import type { ModerationEvent, ModerationEventType } from '@/types/moderation.types';
 import { describeEvent } from './describe-event';
-import { RevokeForm } from './revoke-form';
-import Link from 'next/dist/client/link';
 
 const TYPE_LABELS: Record<ModerationEventType, { text: string; className: string }> = {
   VIOLATION_DETECTED: { text: 'İhlal', className: 'bg-red-100 text-red-800' },
@@ -42,13 +41,15 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
         <tbody>
           {events.map((event) => {
             const label = TYPE_LABELS[event.eventType];
-            const canRevoke = event.eventType === 'SANCTION_IMPOSED' && !revokedIds.has(event.id);
+            const isRevoked = event.eventType === 'SANCTION_IMPOSED' && revokedIds.has(event.id);
             return (
               <tr key={event.id} className="border-t align-top">
                 <td className="p-2 text-muted-foreground">{event.seq}</td>
                 <td className="whitespace-nowrap p-2">{formatDateTime(event.occurredAt)}</td>
                 <td className="p-2">
-                  <span className={cn('rounded px-1.5 py-0.5 text-xs', label.className)}>{label.text}</span>
+                  <span className={cn('rounded px-1.5 py-0.5 text-xs', label.className)}>
+                    {label.text}
+                  </span>
                 </td>
                 <td className="p-2">{nameOf(event.subjectUserId)}</td>
                 <td className="p-2">
@@ -63,7 +64,7 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
                   )}
                 </td>
                 <td className="p-2">
-                  {canRevoke && <RevokeForm userId={event.subjectUserId} eventId={event.id} />}
+                  {isRevoked && <span className="text-xs text-green-700">kaldırıldı</span>}
                 </td>
               </tr>
             );

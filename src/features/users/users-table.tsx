@@ -1,25 +1,19 @@
 import Link from 'next/link';
 import type { SessionUser } from '@/types/auth.types';
 import { ROLE_LABELS } from '@/lib/labels';
-import { SanctionForm } from './sanction-form';
 import { UserStatusBadge } from './user-status-badge';
+import { SanctionDialog } from './sanction-dialog';
 
 function UserActions({ user }: { user: SessionUser }) {
   if (user.role === 'ADMIN') {
     return <span className="text-xs text-muted-foreground">—</span>;
   }
-  const ledgerLink = (
-    <Link href={`/admin/moderation-events?userId=${user.id}`} className="text-xs underline">
-      {user.status === 'BANNED' ? 'Banı kaldırmak için deftere git' : 'Askıyı kaldırmak için deftere git'}
-    </Link>
-  );
-  if (user.status === 'BANNED') {
-    return ledgerLink;
-  }
   return (
-    <div className="space-y-2">
-      {user.status === 'SUSPENDED' ? ledgerLink : <SanctionForm userId={user.id} mode="suspend" />}
-      <SanctionForm userId={user.id} mode="ban" />
+    <div className="flex items-center gap-3">
+      <SanctionDialog user={user} />
+      <Link href={`/admin/moderation-events?userId=${user.id}`} className="text-xs underline">
+        Geçmiş
+      </Link>
     </div>
   );
 }

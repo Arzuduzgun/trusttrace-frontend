@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { Composer } from './composer';
 import { MessageBubble } from './message-bubble';
 import { forceSignOutAction } from '@/endpoints/auth/actions';
+import { SANCTION_REASON_LABELS } from '@/lib/labels';
 
 const CONNECTION_LABELS: Record<ConnectionState, { text: string; className: string }> = {
   connecting: { text: 'Bağlanıyor…', className: 'bg-muted text-muted-foreground' },
@@ -34,7 +35,8 @@ export function ChatWindow({ room, currentUser, initialMessages, readOnly = fals
             void forceSignOutAction('AUTH_ACCOUNT_BANNED');
         return;
       }
-      setNotice(`Hesabınız askıya alındı. Gerekçe: ${sanction.reason}`);
+      const reason = SANCTION_REASON_LABELS[sanction.reasonCode];
+      setNotice(`Hesabınız askıya alındı. Gerekçe: ${sanction.note ? `${reason} – ${sanction.note}` : reason}`);
     },
     onSanctionRevoked: () => setNotice(null),
   });

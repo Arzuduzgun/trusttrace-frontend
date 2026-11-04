@@ -1,6 +1,6 @@
-//Bir defter kaydını tek satırlık, okunabilir bir cümleye çevirir.
-import type { ModerationEvent } from '@/types/moderation.types';
 import { formatDateTime } from '@/lib/format';
+import { REVOKE_REASON_LABELS, SANCTION_REASON_LABELS } from '@/lib/labels';
+import type { ModerationEvent } from '@/types/moderation.types';
 
 const SANCTION_LABELS: Record<string, string> = { SUSPEND: 'Askı', BAN: 'Ban' };
 
@@ -20,6 +20,16 @@ function patterns(value: unknown): string {
     .join(', ');
 }
 
+function reasonOf(payload: Record<string, unknown>, labels: Record<string, string>): string {
+  const code = text(payload['reasonCode']);
+  if (!code) {
+    return text(payload['reason']);
+  }
+  const label = labels[code] ?? code;
+  const note = text(payload['note']);
+  return note ? `${label}: ${note}` : label;
+}
+
 export function describeEvent(event: ModerationEvent): string {
   const payload = event.payload;
   switch (event.eventType) {
@@ -30,11 +40,12 @@ export function describeEvent(event: ModerationEvent): string {
     case 'SANCTION_IMPOSED': {
       const label = SANCTION_LABELS[text(payload['sanction'])] ?? 'Ceza';
       const until = text(payload['suspendedUntil']);
-      return `${label} — ${text(payload['reason'])}${until ? ` (bitiş: ${formatDateTime(until)})` : ''}`;
+      const reason = reasonOf(payload, SANCTION_REASON_LABELS);
+      return `${label} — ${reason}${until ? ` (bitiş: ${formatDateTime(until)})` : ''}`;
     }
     case 'SANCTION_REVOKED': {
       const label = SANCTION_LABELS[text(payload['revokedSanction'])] ?? 'Ceza';
-      return `${label} kaldırıldı — ${text(payload['reason'])}`;
+      return `${label} kaldırıldı — ${reasonOf(payload, REVOKE_REASON_LABELS)}`;
     }
   }
 }

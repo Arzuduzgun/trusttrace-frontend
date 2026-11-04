@@ -356,7 +356,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/users/{id}/sanctions/{eventId}/revoke": {
+    "/api/v1/admin/users/{id}/revoke": {
         parameters: {
             query?: never;
             header?: never;
@@ -492,12 +492,25 @@ export interface components {
             action?: components["schemas"]["RuleAction"];
             isActive?: boolean;
         };
+        /** @enum {string} */
+        SanctionReasonCode: "INSULT" | "SPAM" | "THREAT" | "FRAUD" | "INAPPROPRIATE_CONTENT" | "OTHER";
         SuspendUserDto: {
+            reasonCode: components["schemas"]["SanctionReasonCode"];
+            /** @description reasonCode OTHER ise zorunlu. */
+            note?: string;
             durationHours?: number;
-            reason: string;
         };
         SanctionReasonDto: {
-            reason: string;
+            reasonCode: components["schemas"]["SanctionReasonCode"];
+            /** @description reasonCode OTHER ise zorunlu. */
+            note?: string;
+        };
+        /** @enum {string} */
+        RevokeReasonCode: "WRONG_DECISION" | "APPEAL_ACCEPTED" | "EARLY_RELEASE" | "OTHER";
+        RevokeSanctionDto: {
+            reasonCode: components["schemas"]["RevokeReasonCode"];
+            /** @description reasonCode OTHER ise zorunlu. */
+            note?: string;
         };
     };
     responses: never;
@@ -1092,13 +1105,12 @@ export interface operations {
             header?: never;
             path: {
                 id: string;
-                eventId: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SanctionReasonDto"];
+                "application/json": components["schemas"]["RevokeSanctionDto"];
             };
         };
         responses: {
