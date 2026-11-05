@@ -8,6 +8,7 @@ const TYPE_LABELS: Record<ModerationEventType, { text: string; className: string
   VIOLATION_DETECTED: { text: 'İhlal', className: 'bg-red-100 text-red-800' },
   SANCTION_IMPOSED: { text: 'Ceza', className: 'bg-amber-100 text-amber-900' },
   SANCTION_REVOKED: { text: 'Ceza kaldırıldı', className: 'bg-green-100 text-green-800' },
+  USER_REPORTED: { text: 'Temsilci bildirimi', className: 'bg-orange-100 text-orange-900' },
 };
 
 interface ModerationEventsTableProps {

@@ -528,9 +528,9 @@ export interface components {
             isOnline: boolean;
         };
         /** @enum {string} */
-        ModerationEventType: "VIOLATION_DETECTED" | "SANCTION_IMPOSED" | "SANCTION_REVOKED";
+        ModerationEventType: "VIOLATION_DETECTED" | "SANCTION_IMPOSED" | "SANCTION_REVOKED" | "USER_REPORTED";
         /** @enum {string} */
-        ModerationActorType: "SYSTEM" | "ADMIN";
+        ModerationActorType: "SYSTEM" | "ADMIN" | "AGENT";
         ModerationEventResponseDto: {
             eventType: components["schemas"]["ModerationEventType"];
             actorType: components["schemas"]["ModerationActorType"];
@@ -599,12 +599,23 @@ export interface components {
              * @description İsteyen müşteriyse her zaman null.
              */
             lastReadAt: string | null;
+            /** @description Sadece temsilci ve yöneticiye döner. */
+            email: string | null;
+            status: components["schemas"]["UserStatus"] | null;
+            /** Format: date-time */
+            suspendedUntil: string | null;
             userId: string;
             displayName: string;
             isOnline: boolean;
         };
+        /** @enum {string} */
+        SanctionReasonCode: "INSULT" | "SPAM" | "THREAT" | "FRAUD" | "INAPPROPRIATE_CONTENT" | "OTHER";
         EscalateRoomDto: {
+            reasonCode: components["schemas"]["SanctionReasonCode"];
+            /** @description reasonCode OTHER ise zorunlu. */
             note?: string;
+            /** Format: uuid */
+            customerId: string;
         };
         CreateRoomDto: {
             name: string;
@@ -664,8 +675,6 @@ export interface components {
             action?: components["schemas"]["RuleAction"];
             isActive?: boolean;
         };
-        /** @enum {string} */
-        SanctionReasonCode: "INSULT" | "SPAM" | "THREAT" | "FRAUD" | "INAPPROPRIATE_CONTENT" | "OTHER";
         SuspendUserDto: {
             reasonCode: components["schemas"]["SanctionReasonCode"];
             /** @description reasonCode OTHER ise zorunlu. */

@@ -1,1 +1,1 @@
-	export type { Room, RoomMember,RoomStatus, RoomType } from './api-schemas';
+	export type { Room, RoomMember,RoomStatus, RoomType, MemberRole } from './api-schemas';

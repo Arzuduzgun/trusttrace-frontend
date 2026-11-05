@@ -10,6 +10,7 @@ const TYPE_FILTERS: { label: string; value?: ModerationEventType }[] = [
   { label: 'İhlaller', value: 'VIOLATION_DETECTED' },
   { label: 'Cezalar', value: 'SANCTION_IMPOSED' },
   { label: 'Kaldırılan cezalar', value: 'SANCTION_REVOKED' },
+  { label: 'Temsilci bildirimleri', value: 'USER_REPORTED' },
 ];
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

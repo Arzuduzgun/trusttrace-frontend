@@ -47,5 +47,7 @@ export function describeEvent(event: ModerationEvent): string {
       const label = SANCTION_LABELS[text(payload['revokedSanction'])] ?? 'Ceza';
       return `${label} kaldırıldı — ${reasonOf(payload, REVOKE_REASON_LABELS)}`;
     }
+    case 'USER_REPORTED':
+      return `Temsilci bildirimi — ${reasonOf(payload, SANCTION_REASON_LABELS)}`;
   }
 }

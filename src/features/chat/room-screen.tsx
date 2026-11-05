@@ -28,7 +28,7 @@ export async function RoomScreen({ roomId, user, backHref, readOnly = false, too
   ]);
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-57px)] max-w-3xl flex-col gap-2 p-4">
+    <div className="mx-auto flex h-[calc(100vh-57px)] max-w-6xl flex-col gap-2 p-4">
       <Link href={backHref} className="text-sm text-muted-foreground hover:underline">
         ← Odalar
       </Link>

@@ -1,5 +1,6 @@
 import type { UserRole } from '@/types/auth.types';
 import type { RevokeReasonCode, SanctionAction, SanctionReasonCode } from '@/types/moderation.types';
+import { MemberRole } from '@/types/room.types';
 
 export const ROLE_LABELS: Record<UserRole, string> = {
   CUSTOMER: 'Müşteri',
@@ -27,4 +28,9 @@ export const SANCTION_ACTION_LABELS: Record<SanctionAction, string> = {
   SUSPEND: 'Askıya al',
   BAN: 'Banla',
   REVOKE: 'Cezayı kaldır',
+};
+
+export const MEMBER_ROLE_LABELS: Record<MemberRole, string> = {
+  CUSTOMER: 'Müşteri',
+  AGENT: 'Temsilci',
 };

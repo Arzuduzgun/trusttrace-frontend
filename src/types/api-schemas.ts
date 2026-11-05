@@ -37,3 +37,5 @@ export type RoomMember = Schemas['RoomMemberResponseDto'];
 
 export type Product = Schemas['ProductResponseDto'];
 export type CreateProductRequest = Schemas['CreateProductDto'];
+
+export type MemberRole = Schemas['MemberRole'];

@@ -11,11 +11,12 @@ import type { ConnectionState } from '@/types/chat.types';
 import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
 import type { Room, RoomMember } from '@/types/room.types';
 import { Composer } from './composer';
+import { EscalateDialog } from './escalate-dialog';
+import { MembersPanel } from './members-panel';
 import { MessageBubble } from './message-bubble';
 import { seenMessageId } from './read-receipts';
 import { RoomPresence } from './room-presence';
 import { RoomStatusBadge } from './room-status-badge';
-import { EscalateDialog } from './escalate-dialog';
 
 const CONNECTION_LABELS: Record<ConnectionState, { text: string; className: string }> = {
   connecting: { text: 'Bağlanıyor…', className: 'bg-muted text-muted-foreground' },
@@ -62,47 +63,53 @@ export function ChatWindow({
 
   const connectionLabel = CONNECTION_LABELS[connection];
   const seenId = currentUser.role === 'AGENT' ? seenMessageId(messages, members, currentUser.id) : null;
-
-  const canEscalate = !readOnly && currentUser.role === 'AGENT' && room.status === 'OPEN';
+  const customers = members
+    .filter((member) => member.memberRole === 'CUSTOMER')
+    .map((member) => ({ id: member.userId, displayName: member.displayName }));
+  const canEscalate =
+    !readOnly && currentUser.role === 'AGENT' && room.status !== 'CLOSED' && customers.length > 0;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-lg border">
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <div className="space-y-0.5">
-          <h1 className="font-semibold">{room.name}</h1>
-          <RoomPresence members={members} viewerId={currentUser.id} />
+    <div className="flex min-h-0 flex-1 overflow-hidden rounded-lg border">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-center justify-between gap-2 border-b px-4 py-3">
+          <div className="min-w-0 space-y-0.5">
+            <h1 className="truncate font-semibold">{room.name}</h1>
+            <RoomPresence members={members} viewerId={currentUser.id} />
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            {room.status !== 'OPEN' && <RoomStatusBadge status={room.status} />}
+            {canEscalate && <EscalateDialog roomId={room.id} customers={customers} />}
+            <span className={cn('rounded px-2 py-0.5 text-xs', connectionLabel.className)}>
+              {connectionLabel.text}
+            </span>
+          </div>
         </div>
-          <div className="flex items-center gap-2">
-          {room.status !== 'OPEN' && <RoomStatusBadge status={room.status} />}
-          {canEscalate && <EscalateDialog roomId={room.id} />}
-          <span className={cn('rounded px-2 py-0.5 text-xs', connectionLabel.className)}>
-            {connectionLabel.text}
-          </span>
+        {notice && <p className="bg-amber-100 px-4 py-2 text-sm text-amber-900">{notice}</p>}
+        <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+          {messages.length === 0 && (
+            <p className="m-auto text-sm text-muted-foreground">Henüz mesaj yok. İlk mesajı sen yaz.</p>
+          )}
+          {messages.map((message) => (
+            <MessageBubble
+              key={message.clientMessageId}
+              message={message}
+              isOwn={message.senderId === currentUser.id}
+              onRetry={() => retry(message)}
+              seen={message.clientMessageId === seenId}
+            />
+          ))}
+          <div ref={bottomRef} />
         </div>
-      </div>
-      {notice && <p className="bg-amber-100 px-4 py-2 text-sm text-amber-900">{notice}</p>}
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
-        {messages.length === 0 && (
-          <p className="m-auto text-sm text-muted-foreground">Henüz mesaj yok. İlk mesajı sen yaz.</p>
+        {readOnly ? (
+          <p className="border-t p-3 text-center text-xs text-muted-foreground">
+            Yönetici görünümü — salt okunur
+          </p>
+        ) : (
+          <Composer onSend={send} disabled={connection !== 'connected'} />
         )}
-        {messages.map((message) => (
-          <MessageBubble
-            key={message.clientMessageId}
-            message={message}
-            isOwn={message.senderId === currentUser.id}
-            onRetry={() => retry(message)}
-            seen={message.clientMessageId === seenId}
-          />
-        ))}
-        <div ref={bottomRef} />
       </div>
-      {readOnly ? (
-        <p className="border-t p-3 text-center text-xs text-muted-foreground">
-          Yönetici görünümü — salt okunur
-        </p>
-      ) : (
-        <Composer onSend={send} disabled={connection !== 'connected'} />
-      )}
+      <MembersPanel members={members} viewer={{ id: currentUser.id, role: currentUser.role }} />
     </div>
   );
 }

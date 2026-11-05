@@ -3,7 +3,7 @@ import { REVOKE_REASON_LABELS, SANCTION_REASON_LABELS } from '@/lib/labels';
 import type { RevokeReasonCode, SanctionReasonCode } from '@/types/moderation.types';
 import { passwordSchema } from '../auth/schemas';
 
-const noteSchema = z.preprocess(
+export const noteSchema = z.preprocess(
   (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
   z.string().trim().max(500, 'Açıklama en fazla 500 karakter olabilir.').optional(),
 );
@@ -13,7 +13,7 @@ const durationSchema = z.preprocess(
   z.coerce.number().int().min(1).max(720).optional(),
 );
 
-const sanctionReasonSchema = z.custom<SanctionReasonCode>(
+export const sanctionReasonSchema = z.custom<SanctionReasonCode>(
   (value) => typeof value === 'string' && Object.hasOwn(SANCTION_REASON_LABELS, value),
   'Bir gerekçe seçin.',
 );
