@@ -25,3 +25,9 @@ export interface SocketContextValue {
   socket: import('socket.io-client').Socket | null;
   connection: ConnectionState;
 }
+
+export interface ReadUpdatedEvent {
+  roomId: string;
+  userId: string;
+  lastReadAt: string;
+}

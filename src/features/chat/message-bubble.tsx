@@ -16,10 +16,12 @@ export function MessageBubble({
   message,
   isOwn,
   onRetry,
+  seen = false,
 }: {
   message: ChatMessageView;
   isOwn: boolean;
   onRetry?: () => void;
+  seen?: boolean;
 }) {
   const label = STATUS_LABELS[message.status];
   return (
@@ -47,6 +49,7 @@ export function MessageBubble({
             Tekrar dene
           </button>
         )}
+        {seen && <span className="ml-2 text-blue-600">✓✓ Görüldü</span>}
       </span>
     </div>
   );

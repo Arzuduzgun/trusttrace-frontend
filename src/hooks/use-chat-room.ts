@@ -51,12 +51,19 @@ export function useChatRoom(
     if (!socket) {
       return;
     }
+    const markRead = () => {
+      if (document.visibilityState === 'visible') {
+        socket.emit('room:read', { roomId });
+      }
+    };
     const joinRoom = () => {
       socket.emit('room:join', { roomId });
+      markRead();
     };
     const onNewMessage = (message: ChatMessage) => {
       if (message.roomId === roomId) {
         setMessages((list) => upsert(list, message));
+        markRead();
       }
     };
     const onFailed = (event: MessageFailedEvent) => {
@@ -72,6 +79,7 @@ export function useChatRoom(
     socket.on('message:failed', onFailed);
     socket.on('sanction:applied', onSanctionApplied);
     socket.on('sanction:revoked', onSanctionRevoked);
+    document.addEventListener('visibilitychange', markRead);
     if (socket.connected) {
       joinRoom();
     }
@@ -82,6 +90,7 @@ export function useChatRoom(
       socket.off('message:failed', onFailed);
       socket.off('sanction:applied', onSanctionApplied);
       socket.off('sanction:revoked', onSanctionRevoked);
+      document.removeEventListener('visibilitychange', markRead);
       socket.emit('room:leave', { roomId });
     };
   }, [socket, roomId, markFailed]);

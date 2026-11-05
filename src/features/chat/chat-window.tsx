@@ -1,16 +1,19 @@
-//Konuşma ekranının tamamı: üst bar, mesaj listesi ve yazma kutusu. Hook’tan gelen veriyi gösteriyor.
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
-import type { Room } from '@/types/room.types';
+import { forceSignOutAction } from '@/endpoints/auth/actions';
 import { useChatRoom } from '@/hooks/use-chat-room';
-import type { ConnectionState } from '@/types/chat.types';
+import { useRoomMembers } from '@/hooks/use-room-members';
+import { SANCTION_REASON_LABELS } from '@/lib/labels';
 import { cn } from '@/lib/utils';
+import type { UserRole } from '@/types/auth.types';
+import type { ConnectionState } from '@/types/chat.types';
+import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
+import type { Room, RoomMember } from '@/types/room.types';
 import { Composer } from './composer';
 import { MessageBubble } from './message-bubble';
-import { forceSignOutAction } from '@/endpoints/auth/actions';
-import { SANCTION_REASON_LABELS } from '@/lib/labels';
+import { seenMessageId } from './read-receipts';
+import { RoomPresence } from './room-presence';
 
 const CONNECTION_LABELS: Record<ConnectionState, { text: string; className: string }> = {
   connecting: { text: 'Bağlanıyor…', className: 'bg-muted text-muted-foreground' },
@@ -20,23 +23,33 @@ const CONNECTION_LABELS: Record<ConnectionState, { text: string; className: stri
 
 interface ChatWindowProps {
   room: Room;
-  currentUser: { id: string; displayName: string };
+  currentUser: { id: string; displayName: string; role: UserRole };
   initialMessages: ChatMessage[];
+  initialMembers: RoomMember[];
   readOnly?: boolean;
 }
 
-export function ChatWindow({ room, currentUser, initialMessages, readOnly = false }: ChatWindowProps) {
+export function ChatWindow({
+  room,
+  currentUser,
+  initialMessages,
+  initialMembers,
+  readOnly = false,
+}: ChatWindowProps) {
   const [notice, setNotice] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const members = useRoomMembers(room.id, initialMembers);
 
   const { messages, connection, send, retry } = useChatRoom(room.id, currentUser, initialMessages, {
     onSanctionApplied: (sanction: SanctionNotice) => {
       if (sanction.sanction === 'BAN') {
-            void forceSignOutAction('AUTH_ACCOUNT_BANNED');
+        void forceSignOutAction('AUTH_ACCOUNT_BANNED');
         return;
       }
       const reason = SANCTION_REASON_LABELS[sanction.reasonCode];
-      setNotice(`Hesabınız askıya alındı. Gerekçe: ${sanction.note ? `${reason} – ${sanction.note}` : reason}`);
+      setNotice(
+        `Hesabınız askıya alındı. Gerekçe: ${sanction.note ? `${reason} – ${sanction.note}` : reason}`,
+      );
     },
     onSanctionRevoked: () => setNotice(null),
   });
@@ -46,11 +59,15 @@ export function ChatWindow({ room, currentUser, initialMessages, readOnly = fals
   }, [messages.length]);
 
   const connectionLabel = CONNECTION_LABELS[connection];
+  const seenId = currentUser.role === 'AGENT' ? seenMessageId(messages, members, currentUser.id) : null;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col rounded-lg border">
       <div className="flex items-center justify-between border-b px-4 py-3">
-        <h1 className="font-semibold">{room.name}</h1>
+        <div className="space-y-0.5">
+          <h1 className="font-semibold">{room.name}</h1>
+          <RoomPresence members={members} viewerId={currentUser.id} />
+        </div>
         <span className={cn('rounded px-2 py-0.5 text-xs', connectionLabel.className)}>
           {connectionLabel.text}
         </span>
@@ -66,6 +83,7 @@ export function ChatWindow({ room, currentUser, initialMessages, readOnly = fals
             message={message}
             isOwn={message.senderId === currentUser.id}
             onRetry={() => retry(message)}
+            seen={message.clientMessageId === seenId}
           />
         ))}
         <div ref={bottomRef} />

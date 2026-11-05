@@ -244,6 +244,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/rooms/{id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RoomsController_members"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/rooms": {
         parameters: {
             query?: never;
@@ -508,6 +524,19 @@ export interface components {
             name: string;
             /** Format: date-time */
             createdAt: string;
+        };
+        /** @enum {string} */
+        MemberRole: "CUSTOMER" | "AGENT";
+        RoomMemberResponseDto: {
+            memberRole: components["schemas"]["MemberRole"];
+            /**
+             * Format: date-time
+             * @description İsteyen müşteriyse her zaman null.
+             */
+            lastReadAt: string | null;
+            userId: string;
+            displayName: string;
+            isOnline: boolean;
         };
         CreateRoomDto: {
             name: string;
@@ -947,6 +976,31 @@ export interface operations {
                         /** @enum {boolean} */
                         success: true;
                         data: components["schemas"]["RoomResponseDto"];
+                    };
+                };
+            };
+        };
+    };
+    RoomsController_members: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["RoomMemberResponseDto"][];
                     };
                 };
             };

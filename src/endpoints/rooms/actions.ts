@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { serverFetch } from '@/lib/api/server-fetch';
-import type { Room } from '../../types/room.types';
+import type { Room, RoomMember } from '../../types/room.types';
 
 export async function joinProductRoomAction(roomId: string): Promise<void> {
   await serverFetch<Room>(`/rooms/${roomId}/join`, { method: 'POST' });
@@ -12,4 +12,8 @@ export async function joinProductRoomAction(roomId: string): Promise<void> {
 export async function startDirectRoomAction(): Promise<void> {
   const room = await serverFetch<Room>('/rooms/direct', { method: 'POST' });
   redirect(`/chat/${room.id}`);
+}
+
+export async function getRoomMembersAction(roomId: string): Promise<RoomMember[]> {
+  return serverFetch<RoomMember[]>(`/rooms/${encodeURIComponent(roomId)}/members`);
 }

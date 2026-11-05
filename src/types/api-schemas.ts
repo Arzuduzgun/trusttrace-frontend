@@ -32,3 +32,5 @@ export type AdminUser = Schemas['AdminUserResponseDto'];
 
 export type AppNotification = Schemas['NotificationResponseDto'];
 export type NotificationType = Schemas['NotificationType'];
+
+export type RoomMember = Schemas['RoomMemberResponseDto'];

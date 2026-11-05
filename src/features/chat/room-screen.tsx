@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { SessionUser } from '@/types/auth.types';
 import { getMessageHistory } from '@/endpoints/messages/queries';
-import { listMyRooms } from '@/endpoints/rooms/queries';
+import { listMyRooms, listRoomMembers } from '@/endpoints/rooms/queries';
 import { ChatWindow } from './chat-window';
 
 interface RoomScreenProps {
@@ -19,7 +19,10 @@ export async function RoomScreen({ roomId, user, backHref, readOnly = false }: R
   if (!room) {
     notFound();
   }
-  const history = await getMessageHistory(room.id);
+  const [history, members] = await Promise.all([
+    getMessageHistory(room.id),
+    listRoomMembers(room.id),
+  ]);
 
   return (
     <div className="mx-auto flex h-[calc(100vh-57px)] max-w-3xl flex-col gap-2 p-4">
@@ -28,7 +31,8 @@ export async function RoomScreen({ roomId, user, backHref, readOnly = false }: R
       </Link>
       <ChatWindow
         room={room}
-        currentUser={{ id: user.id, displayName: user.displayName }}
+        currentUser={{ id: user.id, displayName: user.displayName, role: user.role }}
+        initialMembers={members}
         initialMessages={[...history].reverse()}
         readOnly={readOnly}
       />
