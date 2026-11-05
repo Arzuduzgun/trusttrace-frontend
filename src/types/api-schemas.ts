@@ -34,3 +34,6 @@ export type AppNotification = Schemas['NotificationResponseDto'];
 export type NotificationType = Schemas['NotificationType'];
 
 export type RoomMember = Schemas['RoomMemberResponseDto'];
+
+export type Product = Schemas['ProductResponseDto'];
+export type CreateProductRequest = Schemas['CreateProductDto'];

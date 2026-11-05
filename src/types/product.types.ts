@@ -1,0 +1,1 @@
+export type { CreateProductRequest, Product } from './api-schemas';

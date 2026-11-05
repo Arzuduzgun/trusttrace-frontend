@@ -436,6 +436,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProductsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminProductsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -524,6 +556,7 @@ export interface components {
             name: string;
             /** Format: date-time */
             createdAt: string;
+            productId: string | null;
         };
         /** @enum {string} */
         MemberRole: "CUSTOMER" | "AGENT";
@@ -612,6 +645,23 @@ export interface components {
             reasonCode: components["schemas"]["RevokeReasonCode"];
             /** @description reasonCode OTHER ise zorunlu. */
             note?: string;
+        };
+        ProductResponseDto: {
+            roomStatus: components["schemas"]["RoomStatus"] | null;
+            id: string;
+            name: string;
+            description: string;
+            imageUrl: string;
+            priceCents: number;
+            roomId: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        CreateProductDto: {
+            name: string;
+            description: string;
+            imageUrl: string;
+            priceCents: number;
         };
     };
     responses: never;
@@ -1308,6 +1358,56 @@ export interface operations {
                         /** @enum {boolean} */
                         success: true;
                         data: components["schemas"]["UserResponseDto"];
+                    };
+                };
+            };
+        };
+    };
+    ProductsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["ProductResponseDto"][];
+                    };
+                };
+            };
+        };
+    };
+    AdminProductsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProductDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["ProductResponseDto"];
                     };
                 };
             };

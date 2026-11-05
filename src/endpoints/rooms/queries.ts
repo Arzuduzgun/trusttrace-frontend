@@ -7,10 +7,6 @@ export function listMyRooms(): Promise<Room[]> {
   return serverFetch<Room[]>('/rooms');
 }
 
-export function listProductRooms(): Promise<Room[]> {
-  return serverFetch<Room[]>('/rooms/product');
-}
-
 export function listRoomMembers(roomId: string): Promise<RoomMember[]> {
   return serverFetch<RoomMember[]>(`/rooms/${encodeURIComponent(roomId)}/members`);
 }

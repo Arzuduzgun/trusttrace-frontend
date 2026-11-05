@@ -5,3 +5,9 @@ export function formatDateTime(iso: string): string {
     timeStyle: 'short',
   });
 }
+
+const PRICE_FORMAT = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' });
+
+export function formatPrice(cents: number): string {
+  return PRICE_FORMAT.format(cents / 100);
+}
