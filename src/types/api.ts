@@ -84,6 +84,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/moderation-events/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminModerationEventsController_verify"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/register": {
         parameters: {
             query?: never;
@@ -546,6 +562,19 @@ export interface components {
             refersToEventId: string | null;
             /** Format: date-time */
             occurredAt: string;
+            prevHash: string;
+            hash: string;
+        };
+        /** @enum {string} */
+        ChainBreakReason: "PREV_HASH_MISMATCH" | "CONTENT_HASH_MISMATCH";
+        ChainVerificationDto: {
+            brokenAtSeq: number | null;
+            reason: components["schemas"]["ChainBreakReason"] | null;
+            headHash: string | null;
+            valid: boolean;
+            checkedCount: number;
+            /** Format: date-time */
+            verifiedAt: string;
         };
         AuthResponseDto: {
             accessToken: string;
@@ -827,6 +856,29 @@ export interface operations {
                         /** @enum {boolean} */
                         success: true;
                         data: components["schemas"]["ModerationEventResponseDto"][];
+                    };
+                };
+            };
+        };
+    };
+    AdminModerationEventsController_verify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["ChainVerificationDto"];
                     };
                 };
             };

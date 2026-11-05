@@ -4,6 +4,7 @@ import { listModerationEvents } from '@/endpoints/moderation/queries';
 import type { ModerationEventType } from '@/types/moderation.types';
 import { listUsers } from '@/endpoints/users/queries';
 import { ModerationEventsTable } from '@/features/moderation/moderation-events-table';
+import { LedgerVerifyButton } from '@/features/moderation/ledger-verify-button';
 
 const TYPE_FILTERS: { label: string; value?: ModerationEventType }[] = [
   { label: 'Hepsi' },
@@ -53,6 +54,7 @@ export default async function ModerationEventsPage({
           </Link>
         </p>
       )}
+      <LedgerVerifyButton />
       <FilterTabs
         tabs={TYPE_FILTERS.map((filter) => ({
           label: filter.label,

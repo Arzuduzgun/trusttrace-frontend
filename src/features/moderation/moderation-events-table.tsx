@@ -31,6 +31,7 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
         <thead className="bg-muted text-left">
           <tr>
             <th className="p-2">#</th>
+            <th className="p-2">Hash</th>
             <th className="p-2">Zaman</th>
             <th className="p-2">Tür</th>
             <th className="p-2">Kullanıcı</th>
@@ -46,6 +47,9 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
             return (
               <tr key={event.id} className="border-t align-top">
                 <td className="p-2 text-muted-foreground">{event.seq}</td>
+                <td className="p-2 font-mono text-xs text-muted-foreground" title={event.hash}>
+                  {event.hash.slice(0, 10)}…
+                </td>
                 <td className="whitespace-nowrap p-2">{formatDateTime(event.occurredAt)}</td>
                 <td className="p-2">
                   <span className={cn('rounded px-1.5 py-0.5 text-xs', label.className)}>

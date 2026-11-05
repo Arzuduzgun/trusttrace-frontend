@@ -5,6 +5,7 @@ import type { ActionResult } from '@/types/action-result.types';
 import { runAction } from '@/lib/api/run-action';
 import { serverFetch } from '@/lib/api/server-fetch';
 import { createRuleSchema } from './schemas';
+import { ChainVerification } from '@/types/api-schemas';
 
 //Formu kontrol eder, POST /admin/moderation-rules gönderir.
 export async function createRuleAction(_previous: ActionResult, formData: FormData): Promise<ActionResult> {
@@ -30,4 +31,8 @@ export async function toggleRuleAction(ruleId: string, isActive: boolean): Promi
     body: JSON.stringify({ isActive }),
   });
   revalidatePath('/admin', 'layout');
+}
+
+export async function verifyLedgerAction(): Promise<ChainVerification> {
+  return serverFetch<ChainVerification>('/admin/moderation-events/verify');
 }

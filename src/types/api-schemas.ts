@@ -39,3 +39,6 @@ export type Product = Schemas['ProductResponseDto'];
 export type CreateProductRequest = Schemas['CreateProductDto'];
 
 export type MemberRole = Schemas['MemberRole'];
+
+export type ChainVerification = Schemas['ChainVerificationDto'];
+export type ChainBreakReason = Schemas['ChainBreakReason'];
