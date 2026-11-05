@@ -1,14 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { io, type Socket } from 'socket.io-client';
-import { getWsTicketAction } from '@/endpoints/auth/actions';
+import { useSocket } from '@/providers/socket-provider';
+import type {
+  ChatMessageView,
+  ChatRoomHandlers,
+  MessageFailedEvent,
+  SendAck,
+} from '@/types/chat.types';
 import type { ChatMessage, SanctionNotice } from '@/types/messages.types';
-import { WS_URL } from '@/lib/public-env';
-import { ChatMessageView, ChatRoomHandlers, ConnectionState, MessageFailedEvent, SendAck } from '@/types/chat.types';
 
 const ACK_TIMEOUT_MS = 5000;
-
 
 function upsert(list: ChatMessageView[], incoming: ChatMessageView): ChatMessageView[] {
   const index = list.findIndex(
@@ -27,9 +29,8 @@ export function useChatRoom(
   initialMessages: ChatMessage[],
   handlers: ChatRoomHandlers,
 ) {
+  const { socket, connection } = useSocket();
   const [messages, setMessages] = useState<ChatMessageView[]>(initialMessages);
-  const [connection, setConnection] = useState<ConnectionState>('connecting');
-  const socketRef = useRef<Socket | null>(null);
   const handlersRef = useRef(handlers);
 
   useEffect(() => {
@@ -45,50 +46,48 @@ export function useChatRoom(
       ),
     );
   }, []);
-  
-  useEffect(() => {
-    const socket = io(WS_URL, {
-      transports: ['websocket'],
-      auth: (callback) => {
-        getWsTicketAction()
-          .then((ticket) => callback({ ticket }))
-          .catch(() => callback({}));
-      },
-    });
-    socketRef.current = socket;
 
-    socket.on('connect', () => {
-      setConnection('connected');
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+    const joinRoom = () => {
       socket.emit('room:join', { roomId });
-    });
-    socket.on('disconnect', () => setConnection('disconnected'));
-    socket.on('connect_error', () => setConnection('disconnected'));
-    socket.on('message:new', (message: ChatMessage) => {
+    };
+    const onNewMessage = (message: ChatMessage) => {
       if (message.roomId === roomId) {
         setMessages((list) => upsert(list, message));
       }
-    });
-    socket.on('message:failed', (event: MessageFailedEvent) => {
+    };
+    const onFailed = (event: MessageFailedEvent) => {
       if (event.roomId === roomId) {
         markFailed(event.clientMessageId, event.reason);
       }
-    });
-    socket.on('sanction:applied', (notice: SanctionNotice) => {
-      handlersRef.current.onSanctionApplied(notice);
-    });
-    socket.on('sanction:revoked', () => {
-      handlersRef.current.onSanctionRevoked();
-    });
+    };
+    const onSanctionApplied = (notice: SanctionNotice) => handlersRef.current.onSanctionApplied(notice);
+    const onSanctionRevoked = () => handlersRef.current.onSanctionRevoked();
+
+    socket.on('connect', joinRoom);
+    socket.on('message:new', onNewMessage);
+    socket.on('message:failed', onFailed);
+    socket.on('sanction:applied', onSanctionApplied);
+    socket.on('sanction:revoked', onSanctionRevoked);
+    if (socket.connected) {
+      joinRoom();
+    }
 
     return () => {
-      socket.disconnect();
-      socketRef.current = null;
+      socket.off('connect', joinRoom);
+      socket.off('message:new', onNewMessage);
+      socket.off('message:failed', onFailed);
+      socket.off('sanction:applied', onSanctionApplied);
+      socket.off('sanction:revoked', onSanctionRevoked);
+      socket.emit('room:leave', { roomId });
     };
-  }, [roomId, markFailed]);
+  }, [socket, roomId, markFailed]);
 
   const emitMessage = useCallback(
     (clientMessageId: string, body: string) => {
-      const socket = socketRef.current;
       if (!socket?.connected) {
         markFailed(clientMessageId, 'Bağlantı yok.');
         return;
@@ -107,7 +106,7 @@ export function useChatRoom(
           }
         });
     },
-    [roomId, markFailed],
+    [socket, roomId, markFailed],
   );
 
   const send = useCallback(

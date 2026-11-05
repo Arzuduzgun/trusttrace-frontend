@@ -29,3 +29,6 @@ export type SanctionReasonCode = Schemas['SanctionReasonCode'];
 export type RevokeReasonCode = Schemas['RevokeReasonCode'];
 
 export type AdminUser = Schemas['AdminUserResponseDto'];
+
+export type AppNotification = Schemas['NotificationResponseDto'];
+export type NotificationType = Schemas['NotificationType'];

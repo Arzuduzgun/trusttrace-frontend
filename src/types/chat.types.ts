@@ -20,3 +20,8 @@ export interface ChatRoomHandlers {
 export type SendAck =
   | { ok: true; data: ChatMessage }
   | { ok: false; error: { code: string; message: string } };
+
+export interface SocketContextValue {
+  socket: import('socket.io-client').Socket | null;
+  connection: ConnectionState;
+}
