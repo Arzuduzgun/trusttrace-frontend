@@ -5,15 +5,18 @@ import type { SessionUser } from '@/types/auth.types';
 import { getMessageHistory } from '@/endpoints/messages/queries';
 import { listMyRooms, listRoomMembers } from '@/endpoints/rooms/queries';
 import { ChatWindow } from './chat-window';
+import { ReactNode } from 'react';
+import { Room } from '@/types/room.types';
 
 interface RoomScreenProps {
   roomId: string;
   user: SessionUser;
   backHref: string;
   readOnly?: boolean;
+  toolbar?: (room: Room) => ReactNode;
 }
 
-export async function RoomScreen({ roomId, user, backHref, readOnly = false }: RoomScreenProps) {
+export async function RoomScreen({ roomId, user, backHref, readOnly = false, toolbar }: RoomScreenProps) {
   const rooms = await listMyRooms();
   const room = rooms.find((candidate) => candidate.id === roomId);
   if (!room) {
@@ -29,6 +32,7 @@ export async function RoomScreen({ roomId, user, backHref, readOnly = false }: R
       <Link href={backHref} className="text-sm text-muted-foreground hover:underline">
         ← Odalar
       </Link>
+      {toolbar?.(room)}
       <ChatWindow
         room={room}
         currentUser={{ id: user.id, displayName: user.displayName, role: user.role }}

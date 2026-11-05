@@ -7,6 +7,7 @@ const ADMIN_LINKS = [
   { href: '/admin/rules', label: 'Yasaklı kelimeler' },
   { href: '/admin/conversations', label: 'Konuşmalar' },
   { href: '/admin/products', label: 'Ürünler' },
+  { href: '/admin/health', label: 'Sistem sağlığı' },
 ];
 
 export function AdminNav() {

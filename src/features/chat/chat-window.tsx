@@ -14,6 +14,8 @@ import { Composer } from './composer';
 import { MessageBubble } from './message-bubble';
 import { seenMessageId } from './read-receipts';
 import { RoomPresence } from './room-presence';
+import { RoomStatusBadge } from './room-status-badge';
+import { EscalateDialog } from './escalate-dialog';
 
 const CONNECTION_LABELS: Record<ConnectionState, { text: string; className: string }> = {
   connecting: { text: 'Bağlanıyor…', className: 'bg-muted text-muted-foreground' },
@@ -61,6 +63,8 @@ export function ChatWindow({
   const connectionLabel = CONNECTION_LABELS[connection];
   const seenId = currentUser.role === 'AGENT' ? seenMessageId(messages, members, currentUser.id) : null;
 
+  const canEscalate = !readOnly && currentUser.role === 'AGENT' && room.status === 'OPEN';
+
   return (
     <div className="flex min-h-0 flex-1 flex-col rounded-lg border">
       <div className="flex items-center justify-between border-b px-4 py-3">
@@ -68,9 +72,13 @@ export function ChatWindow({
           <h1 className="font-semibold">{room.name}</h1>
           <RoomPresence members={members} viewerId={currentUser.id} />
         </div>
-        <span className={cn('rounded px-2 py-0.5 text-xs', connectionLabel.className)}>
-          {connectionLabel.text}
-        </span>
+          <div className="flex items-center gap-2">
+          {room.status !== 'OPEN' && <RoomStatusBadge status={room.status} />}
+          {canEscalate && <EscalateDialog roomId={room.id} />}
+          <span className={cn('rounded px-2 py-0.5 text-xs', connectionLabel.className)}>
+            {connectionLabel.text}
+          </span>
+        </div>
       </div>
       {notice && <p className="bg-amber-100 px-4 py-2 text-sm text-amber-900">{notice}</p>}
       <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">

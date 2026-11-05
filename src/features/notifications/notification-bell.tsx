@@ -14,7 +14,7 @@ import { useSocket } from '@/providers/socket-provider';
 import type { AppNotification } from '@/types/notification.types';
 import { describeNotification } from './describe-notification';
 
-export function NotificationBell({ initial }: { initial: AppNotification[] }) {
+export function NotificationBell({ initial, roomBasePath }: { initial: AppNotification[]; roomBasePath: string; }) {
   const { socket } = useSocket();
   const router = useRouter();
   const [items, setItems] = useState(initial);
@@ -43,7 +43,7 @@ export function NotificationBell({ initial }: { initial: AppNotification[] }) {
     setOpen(false);
     void markNotificationReadAction(notification.id);
     if (notification.roomId) {
-      router.push(`/agent/rooms/${notification.roomId}`);
+      router.push(`${roomBasePath}/${notification.roomId}`);
     }
   }
 

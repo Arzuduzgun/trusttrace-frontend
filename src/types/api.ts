@@ -260,6 +260,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/rooms/{id}/escalate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["RoomsController_escalate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/rooms": {
         parameters: {
             query?: never;
@@ -286,6 +302,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminRoomsController_addMember"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/rooms/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminRoomsController_setStatus"];
         delete?: never;
         options?: never;
         head?: never;
@@ -571,6 +603,9 @@ export interface components {
             displayName: string;
             isOnline: boolean;
         };
+        EscalateRoomDto: {
+            note?: string;
+        };
         CreateRoomDto: {
             name: string;
         };
@@ -578,8 +613,11 @@ export interface components {
             /** Format: uuid */
             userId: string;
         };
+        UpdateRoomStatusDto: {
+            status: components["schemas"]["RoomStatus"];
+        };
         /** @enum {string} */
-        NotificationType: "ROOM_ASSIGNED";
+        NotificationType: "ROOM_ASSIGNED" | "ROOM_ESCALATED";
         NotificationResponseDto: {
             type: components["schemas"]["NotificationType"];
             payload: {
@@ -1056,6 +1094,35 @@ export interface operations {
             };
         };
     };
+    RoomsController_escalate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EscalateRoomDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["RoomResponseDto"];
+                    };
+                };
+            };
+        };
+    };
     AdminRoomsController_create: {
         parameters: {
             query?: never;
@@ -1103,6 +1170,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    AdminRoomsController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRoomStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["RoomResponseDto"];
+                    };
+                };
             };
         };
     };
