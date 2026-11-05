@@ -11,6 +11,7 @@ export default async function AdminConversationPage({
   const user = await requireRole('ADMIN');
   return (
     <RoomScreen
+      roomBasePath="/admin/conversations"
       roomId={roomId}
       user={user}
       backHref="/admin/conversations"

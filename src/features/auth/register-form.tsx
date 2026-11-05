@@ -6,7 +6,11 @@ import { FormField } from '@/components/form-field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { registerAction } from '@/endpoints/auth/actions';
+import { registerSchema } from '@/endpoints/auth/schemas';
+import { useLiveValidation } from '@/hooks/use-live-validation';
 import type { RegisterState } from '@/types/auth.types';
+
+type RegisterField = 'displayName' | 'email' | 'password' | 'passwordConfirm';
 
 const INITIAL_STATE: RegisterState = {
   error: null,
@@ -16,7 +20,23 @@ const INITIAL_STATE: RegisterState = {
 
 export function RegisterForm() {
   const [state, formAction, isPending] = useActionState(registerAction, INITIAL_STATE);
-  const formKey = `${state.values.displayName}|${state.values.email}`;
+  const { values, field, errorOf } = useLiveValidation<RegisterField>(registerSchema, {
+    displayName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const errorsFor = (name: RegisterField) => {
+    const message = errorOf(name);
+    if (message) {
+      return [message];
+    }
+    if (name === 'email' && values.email === state.values.email) {
+      return state.fieldErrors.email;
+    }
+    return undefined;
+  };
 
   return (
     <Card className="w-full max-w-sm">
@@ -25,40 +45,38 @@ export function RegisterForm() {
         <CardDescription>TrustTrace müşteri hesabı oluştur</CardDescription>
       </CardHeader>
       <CardContent>
-        <form key={formKey} action={formAction} className="space-y-4">
+        <form action={formAction} className="space-y-4">
           <FormField
             label="Ad"
-            name="displayName"
             autoComplete="name"
-            defaultValue={state.values.displayName}
-            errors={state.fieldErrors.displayName}
             required
+            errors={errorsFor('displayName')}
+            {...field('displayName')}
           />
           <FormField
             label="E-posta"
-            name="email"
             type="email"
             autoComplete="email"
-            defaultValue={state.values.email}
-            errors={state.fieldErrors.email}
             required
+            errors={errorsFor('email')}
+            {...field('email')}
           />
           <FormField
             label="Şifre"
-            name="password"
             type="password"
             autoComplete="new-password"
             hint="En az 8 karakter, en az bir harf ve bir rakam."
-            errors={state.fieldErrors.password}
             required
+            errors={errorsFor('password')}
+            {...field('password')}
           />
           <FormField
             label="Şifre (tekrar)"
-            name="passwordConfirm"
             type="password"
             autoComplete="new-password"
-            errors={state.fieldErrors.passwordConfirm}
             required
+            errors={errorsFor('passwordConfirm')}
+            {...field('passwordConfirm')}
           />
           {state.error && (
             <p className="text-sm text-destructive" role="alert">

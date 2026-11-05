@@ -5,5 +5,5 @@ import { requireRole } from '@/lib/auth/session';
 export default async function CustomerRoomPage({ params }: { params: Promise<{ roomId: string }> }) {
   const { roomId } = await params;
   const user = await requireRole('CUSTOMER');
-  return <RoomScreen roomId={roomId} user={user} backHref="/chat" />;
+  return <RoomScreen roomBasePath="/chat" roomId={roomId} user={user} backHref="/chat" />;
 }

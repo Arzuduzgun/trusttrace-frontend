@@ -6,16 +6,19 @@ import { FormField } from '@/components/form-field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { loginAction } from '@/endpoints/auth/actions';
+import { loginSchema } from '@/endpoints/auth/schemas';
+import { useLiveValidation } from '@/hooks/use-live-validation';
 import type { LoginState } from '@/types/auth.types';
 
-const INITIAL_STATE: LoginState = {
-  error: null,
-  fieldErrors: {},
-  values: { email: '' },
-};
+const INITIAL_STATE: LoginState = { error: null, fieldErrors: {}, values: { email: '' } };
 
 export function LoginForm({ notice }: { notice: string | null }) {
   const [state, formAction, isPending] = useActionState(loginAction, INITIAL_STATE);
+  const { field, errorOf } = useLiveValidation(loginSchema, { email: '', password: '' });
+  const errorsFor = (name: 'email' | 'password') => {
+    const message = errorOf(name);
+    return message ? [message] : undefined;
+  };
 
   return (
     <Card className="w-full max-w-sm">
@@ -29,22 +32,20 @@ export function LoginForm({ notice }: { notice: string | null }) {
             <p className="rounded-md bg-amber-100 p-3 text-sm text-amber-900">{notice}</p>
           )}
           <FormField
-            key={state.values.email}
             label="E-posta"
-            name="email"
             type="email"
             autoComplete="email"
-            defaultValue={state.values.email}
-            errors={state.fieldErrors.email}
             required
+            errors={errorsFor('email')}
+            {...field('email')}
           />
           <FormField
             label="Şifre"
-            name="password"
             type="password"
             autoComplete="current-password"
-            errors={state.fieldErrors.password}
             required
+            errors={errorsFor('password')}
+            {...field('password')}
           />
           {state.error && (
             <p className="text-sm text-destructive" role="alert">
