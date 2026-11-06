@@ -68,3 +68,21 @@ export async function addRoomMemberAction(
     }),
   );
 }
+
+export async function replaceRoomAgentAction(
+  roomId: string,
+  _previous: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
+  const currentAgentId = formText(formData, 'currentAgentId');
+  const newAgentId = formText(formData, 'newAgentId');
+  if (!currentAgentId || !newAgentId) {
+    return { error: 'Çıkarılacak ve yeni temsilciyi seçin.', done: false };
+  }
+  return runAction(() =>
+    serverFetchVoid(
+      `/admin/rooms/${encodeURIComponent(roomId)}/agents/${encodeURIComponent(currentAgentId)}/replace`,
+      { method: 'POST', body: JSON.stringify({ newAgentId }) },
+    ),
+  );
+}
