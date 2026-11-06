@@ -3,7 +3,6 @@ import { listRoomMembers } from '@/endpoints/rooms/queries';
 import { setRoomStatusAction } from '@/endpoints/rooms/actions';
 import { listUsers } from '@/endpoints/users/queries';
 import type { Room } from '@/types/room.types';
-import { AddAgentForm } from './add-agent-form';
 import { ReplaceAgentForm } from './replace-agent-form';
 import { RoomStatusBadge } from './room-status-badge';
 
@@ -36,8 +35,6 @@ export async function RoomAdminPanel({ room }: { room: Room }) {
           </Button>
         </form>
       )}
-      <span className="mx-1 h-5 w-px bg-border" />
-      <AddAgentForm roomId={room.id} agents={availableAgents} />
       <span className="mx-1 h-5 w-px bg-border" />
       <ReplaceAgentForm roomId={room.id} currentAgents={currentAgents} availableAgents={availableAgents} />
     </div>
