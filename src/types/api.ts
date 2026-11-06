@@ -324,6 +324,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/rooms/{id}/agents/{agentId}/replace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminRoomsController_replaceAgent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/rooms/{id}/status": {
         parameters: {
             query?: never;
@@ -560,6 +576,7 @@ export interface components {
             roomId: string | null;
             messageId: string | null;
             refersToEventId: string | null;
+            traceId: string | null;
             /** Format: date-time */
             occurredAt: string;
             prevHash: string;
@@ -652,6 +669,10 @@ export interface components {
         AddMemberDto: {
             /** Format: uuid */
             userId: string;
+        };
+        ReplaceAgentDto: {
+            /** Format: uuid */
+            newAgentId: string;
         };
         UpdateRoomStatusDto: {
             status: components["schemas"]["RoomStatus"];
@@ -1223,6 +1244,30 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["AddMemberDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminRoomsController_replaceAgent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                agentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReplaceAgentDto"];
             };
         };
         responses: {

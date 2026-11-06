@@ -62,6 +62,11 @@ export function ModerationEventsTable({ events, names }: ModerationEventsTablePr
                 </td>
                 <td className="p-2">
                   <div>{describeEvent(event)}</div>
+                  {event.traceId && (
+                    <div className="font-mono text-[10px] text-muted-foreground" title="Trace ID">
+                      trace: {event.traceId}
+                    </div>
+                  )}
                   {event.roomId && (
                     <Link href={`/admin/conversations/${event.roomId}`} className="text-xs underline">
                       konuşmada gör
