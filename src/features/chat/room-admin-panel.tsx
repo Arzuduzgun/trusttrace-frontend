@@ -17,20 +17,20 @@ export async function RoomAdminPanel({ room }: { room: Room }) {
     .map((member) => ({ id: member.userId, displayName: member.displayName }));
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/30 p-3 text-sm">
+    <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-linear-to-r from-indigo-50 via-amber-50 to-emerald-50 p-3 text-sm shadow-sm">
       <span className="flex items-center gap-2">
         Durum: <RoomStatusBadge status={room.status} />
       </span>
       {room.status !== 'CLOSED' && (
         <form action={setRoomStatusAction.bind(null, room.id, 'CLOSED')}>
-          <Button type="submit" size="sm" variant="outline">
+          <Button type="submit" size="sm" variant="warning">
             Kapat
           </Button>
         </form>
       )}
       {room.status !== 'OPEN' && (
         <form action={setRoomStatusAction.bind(null, room.id, 'OPEN')}>
-          <Button type="submit" size="sm" variant="outline">
+          <Button type="submit" size="sm" variant="success">
             Yeniden aç
           </Button>
         </form>

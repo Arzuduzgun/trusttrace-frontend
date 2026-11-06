@@ -70,11 +70,11 @@ export function ChatWindow({
     !readOnly && currentUser.role === 'AGENT' && room.status !== 'CLOSED' && customers.length > 0;
 
   return (
-    <div className="flex min-h-0 flex-1 overflow-hidden rounded-lg border">
+    <div className="flex min-h-0 flex-1 overflow-hidden rounded-xl border bg-card shadow-sm">
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center justify-between gap-2 border-b px-4 py-3">
+        <div className="flex items-center justify-between gap-2 border-b bg-linear-to-r from-indigo-100 via-violet-50 to-amber-100 px-4 py-3">
           <div className="min-w-0 space-y-0.5">
-            <h1 className="truncate font-semibold">{room.name}</h1>
+            <h1 className="truncate font-semibold text-indigo-950">{room.name}</h1>
             <RoomPresence members={members} viewerId={currentUser.id} />
           </div>
           <div className="flex shrink-0 items-center gap-2">
@@ -86,7 +86,7 @@ export function ChatWindow({
           </div>
         </div>
         {notice && <p className="bg-amber-100 px-4 py-2 text-sm text-amber-900">{notice}</p>}
-        <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+        <div className="flex flex-1 flex-col gap-3 overflow-y-auto bg-linear-to-b from-transparent to-indigo-50/50 p-4">
           {messages.length === 0 && (
             <p className="m-auto text-sm text-muted-foreground">Henüz mesaj yok. İlk mesajı sen yaz.</p>
           )}

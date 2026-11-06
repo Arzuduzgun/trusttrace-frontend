@@ -3,6 +3,7 @@ import type { AdminUser, SessionUser } from '@/types/auth.types';
 import { ROLE_LABELS } from '@/lib/labels';
 import { UserStatusBadge } from './user-status-badge';
 import { SanctionDialog } from './sanction-dialog';
+import { InviteButton } from './invite-button';
 import { cn } from '@/lib/utils';
 
 
@@ -11,11 +12,12 @@ function UserActions({ user }: { user: SessionUser }) {
     return <span className="text-xs text-muted-foreground">—</span>;
   }
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-start gap-3">
       <SanctionDialog user={user} />
       <Link href={`/admin/moderation-events?userId=${user.id}`} className="text-xs underline">
         Geçmiş
       </Link>
+      {user.role === 'AGENT' && <InviteButton userId={user.id} />}
     </div>
   );
 }
@@ -25,7 +27,7 @@ export function UsersTable({ users }: { users: AdminUser[] }) {
     return <p className="text-sm text-muted-foreground">Bu filtrede kullanıcı yok.</p>;
   }
   return (
-    <div className="overflow-x-auto rounded-md border">
+    <div className="overflow-x-auto rounded-xl border bg-card shadow-sm">
       <table className="w-full text-sm">
         <thead className="bg-muted text-left">
           <tr>

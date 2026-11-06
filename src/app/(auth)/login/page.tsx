@@ -1,3 +1,4 @@
+import { AuthShell } from '@/components/shell/auth-shell';
 import { LoginForm } from '@/features/auth/login-form';
 import { LOGIN_REASON_MESSAGES } from '@/features/auth/login-reasons';
 
@@ -10,8 +11,8 @@ export default async function LoginPage({
   const notice = reason ? (LOGIN_REASON_MESSAGES[reason] ?? null) : null;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-muted p-4">
+    <AuthShell>
       <LoginForm notice={notice} />
-    </main>
+    </AuthShell>
   );
 }

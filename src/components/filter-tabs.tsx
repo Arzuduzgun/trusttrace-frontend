@@ -11,8 +11,10 @@ export function FilterTabs({ tabs }: { tabs: FilterTab[] }) {
           key={tab.href}
           href={tab.href}
           className={cn(
-            'rounded-full border px-3 py-1 text-sm',
-            tab.active ? 'bg-primary text-primary-foreground' : 'hover:bg-muted',
+            'rounded-full px-3.5 py-1.5 text-sm font-medium transition-all',
+            tab.active
+              ? 'bg-linear-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25'
+              : 'border border-indigo-200 bg-card text-indigo-700 hover:bg-indigo-50',
           )}
         >
           {tab.label}

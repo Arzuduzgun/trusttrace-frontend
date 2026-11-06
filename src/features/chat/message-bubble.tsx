@@ -29,8 +29,10 @@ export function MessageBubble({
       {!isOwn && <span className="text-xs text-muted-foreground">{message.senderName}</span>}
       <div
         className={cn(
-          'whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm',
-          isOwn ? 'bg-primary text-primary-foreground' : 'bg-muted',
+          'whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2 text-sm',
+          isOwn
+            ? 'bg-linear-to-br from-indigo-600 to-violet-600 text-white shadow-sm shadow-indigo-500/20'
+            : 'border bg-card shadow-sm',
           message.status === 'BLOCKED' && 'line-through opacity-60',
         )}
       >
@@ -49,7 +51,7 @@ export function MessageBubble({
             Tekrar dene
           </button>
         )}
-        {seen && <span className="ml-2 text-blue-600">✓✓ Görüldü</span>}
+        {seen && <span className="ml-2 font-medium text-primary">✓✓ Görüldü</span>}
       </span>
     </div>
   );

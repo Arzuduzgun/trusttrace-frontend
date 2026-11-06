@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { REVOKE_REASON_LABELS, SANCTION_REASON_LABELS } from '@/lib/labels';
 import type { RevokeReasonCode, SanctionReasonCode } from '@/types/moderation.types';
-import { passwordSchema } from '../auth/schemas';
 
 export const noteSchema = z.preprocess(
   (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
@@ -42,5 +41,4 @@ export const sanctionFormSchema = z
 export const createAgentSchema = z.object({
   displayName: z.string().trim().min(2, 'Ad en az 2 karakter olmalı.').max(80),
   email: z.email('Geçerli bir e-posta girin.').max(254),
-  password: passwordSchema,
 });

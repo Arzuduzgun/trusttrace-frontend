@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { FormField } from '@/components/form-field';
+import { BrandLogo } from '@/components/shell/brand-logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { registerAction } from '@/endpoints/auth/actions';
@@ -39,9 +40,10 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Kayıt ol</CardTitle>
+    <Card className="w-full max-w-sm shadow-xl shadow-indigo-500/10">
+      <CardHeader className="space-y-3">
+        <BrandLogo size="lg" />
+        <CardTitle className="text-xl">Kayıt ol</CardTitle>
         <CardDescription>TrustTrace müşteri hesabı oluştur</CardDescription>
       </CardHeader>
       <CardContent>
@@ -88,7 +90,7 @@ export function RegisterForm() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Zaten hesabın var mı?{' '}
-            <Link href="/login" className="underline">
+            <Link href="/login" className="font-medium text-primary underline">
               Giriş yap
             </Link>
           </p>

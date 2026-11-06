@@ -16,10 +16,12 @@ export function MembersPanel({
 }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-l lg:flex">
-      <h2 className="border-b px-3 py-3 text-sm font-medium">Üyeler ({members.length})</h2>
+      <h2 className="border-b bg-linear-to-r from-emerald-100 to-amber-50 px-3 py-3 text-sm font-semibold text-emerald-900">
+        Üyeler ({members.length})
+      </h2>
       <ul className="flex-1 space-y-1 overflow-y-auto p-2">
         {members.map((member) => (
-          <li key={member.userId} className="rounded-md p-2 text-sm hover:bg-muted">
+          <li key={member.userId} className="rounded-lg p-2 text-sm hover:bg-emerald-50">
             <div className="flex items-center gap-2">
               <span
                 className={cn(

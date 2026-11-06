@@ -161,7 +161,16 @@ export function SanctionDialog({ user }: { user: SessionUser }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" variant="outline" />}>İşlem yap</DialogTrigger>
+        <DialogTrigger
+          render={
+            <Button
+              size="sm"
+              className="bg-linear-to-r from-rose-500 to-pink-500 text-white shadow-md shadow-rose-500/25 hover:from-rose-400 hover:to-pink-400"
+            />
+          }
+        >
+          İşlem yap
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{user.displayName}</DialogTitle>

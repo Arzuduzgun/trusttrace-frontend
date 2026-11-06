@@ -196,6 +196,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/agents/{id}/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAgentsController_reissueInvite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/invites/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InvitesController_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/invites/{token}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InvitesController_accept"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/rooms": {
         parameters: {
             query?: never;
@@ -617,11 +665,28 @@ export interface components {
             ticket: string;
             expiresIn: number;
         };
+        AgentInviteResponseDto: {
+            token: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        AgentCreatedResponseDto: {
+            user: components["schemas"]["UserResponseDto"];
+            invite: components["schemas"]["AgentInviteResponseDto"];
+        };
         CreateAgentDto: {
             /** Format: email */
             email: string;
-            password: string;
             displayName: string;
+        };
+        InvitePreviewResponseDto: {
+            email: string;
+            displayName: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        AcceptInviteDto: {
+            password: string;
         };
         /** @enum {string} */
         RoomType: "DIRECT" | "PRODUCT";
@@ -857,7 +922,7 @@ export interface operations {
     AdminModerationEventsController_list: {
         parameters: {
             query: {
-                eventType?: components["schemas"]["ModerationActorType"];
+                eventType?: components["schemas"]["ModerationEventType"];
                 userId?: string;
                 roomId?: string;
                 limit: number;
@@ -1051,9 +1116,82 @@ export interface operations {
                     "application/json": {
                         /** @enum {boolean} */
                         success: true;
-                        data: components["schemas"]["UserResponseDto"];
+                        data: components["schemas"]["AgentCreatedResponseDto"];
                     };
                 };
+            };
+        };
+    };
+    AdminAgentsController_reissueInvite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["AgentInviteResponseDto"];
+                    };
+                };
+            };
+        };
+    };
+    InvitesController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        success: true;
+                        data: components["schemas"]["InvitePreviewResponseDto"];
+                    };
+                };
+            };
+        };
+    };
+    InvitesController_accept: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptInviteDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

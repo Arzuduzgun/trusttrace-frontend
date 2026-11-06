@@ -17,6 +17,11 @@ export interface RegisterState {
   values: { displayName: string; email: string };
 }
 
+export interface AcceptInviteState {
+  error: string | null;
+  fieldErrors: { password?: string[]; passwordConfirm?: string[] };
+}
+
 export interface TokenPair {
   accessToken: string;
   refreshToken: string;

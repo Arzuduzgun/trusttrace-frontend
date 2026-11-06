@@ -22,3 +22,13 @@ export const registerSchema = z
     message: 'Şifreler eşleşmiyor.',
     path: ['passwordConfirm'],
   });
+
+export const acceptInviteSchema = z
+  .object({
+    password: passwordSchema,
+    passwordConfirm: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: 'Şifreler eşleşmiyor.',
+    path: ['passwordConfirm'],
+  });

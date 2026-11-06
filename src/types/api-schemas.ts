@@ -42,3 +42,6 @@ export type MemberRole = Schemas['MemberRole'];
 
 export type ChainVerification = Schemas['ChainVerificationDto'];
 export type ChainBreakReason = Schemas['ChainBreakReason'];
+export type AgentInvite = Schemas['AgentInviteResponseDto'];
+export type AgentCreated = Schemas['AgentCreatedResponseDto'];
+export type InvitePreview = Schemas['InvitePreviewResponseDto'];

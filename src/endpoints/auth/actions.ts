@@ -7,8 +7,14 @@ import { ApiError } from '@/lib/api/api-error';
 import { serverFetch, serverFetchVoid } from '@/lib/api/server-fetch';
 import { clearTokens, getRefreshToken, saveTokens } from '@/lib/auth/cookies';
 import { ROLE_HOME } from '@/lib/auth/role-home';
-import { loginSchema, registerSchema } from './schemas';
-import type { AuthResult, LoginState, RegisterState, WsTicket } from '../../types/auth.types';
+import { acceptInviteSchema, loginSchema, registerSchema } from './schemas';
+import type {
+  AcceptInviteState,
+  AuthResult,
+  LoginState,
+  RegisterState,
+  WsTicket,
+} from '../../types/auth.types';
 import { fieldErrorsFromApiError } from '@/lib/api/field-errors';
 import { formText } from '@/lib/form-data';
 import { RegisterRequest } from '@/types/api-schemas';
@@ -93,4 +99,30 @@ export async function getWsTicketAction(): Promise<string> {
 export async function forceSignOutAction(reason: string): Promise<void> {
   await clearTokens();
   redirect(`/login?reason=${encodeURIComponent(reason)}`);
+}
+
+export async function acceptInviteAction(
+  token: string,
+  _previous: AcceptInviteState,
+  formData: FormData,
+): Promise<AcceptInviteState> {
+  const parsed = acceptInviteSchema.safeParse({
+    password: formText(formData, 'password'),
+    passwordConfirm: formText(formData, 'passwordConfirm'),
+  });
+  if (!parsed.success) {
+    return { error: null, fieldErrors: z.flattenError(parsed.error).fieldErrors };
+  }
+  try {
+    await serverFetchVoid(`/auth/invites/${encodeURIComponent(token)}/accept`, {
+      method: 'POST',
+      body: JSON.stringify({ password: parsed.data.password }),
+    });
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return { error: error.message, fieldErrors: {} };
+    }
+    throw error;
+  }
+  redirect('/login?reason=INVITE_ACCEPTED');
 }

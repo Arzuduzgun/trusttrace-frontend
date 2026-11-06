@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { FormField } from '@/components/form-field';
+import { BrandLogo } from '@/components/shell/brand-logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { loginAction } from '@/endpoints/auth/actions';
@@ -21,15 +22,16 @@ export function LoginForm({ notice }: { notice: string | null }) {
   };
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">TrustTrace</CardTitle>
-        <CardDescription>Müşteri hizmetleri platformuna giriş</CardDescription>
+    <Card className="w-full max-w-sm shadow-xl shadow-indigo-500/10">
+      <CardHeader className="space-y-3">
+        <BrandLogo size="lg" />
+        <CardTitle className="text-xl">Tekrar hoş geldin</CardTitle>
+        <CardDescription>Müşteri hizmetleri platformuna giriş yap</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-4">
           {notice && (
-            <p className="rounded-md bg-amber-100 p-3 text-sm text-amber-900">{notice}</p>
+            <p className="rounded-md bg-primary/10 p-3 text-sm text-primary">{notice}</p>
           )}
           <FormField
             label="E-posta"
@@ -57,7 +59,7 @@ export function LoginForm({ notice }: { notice: string | null }) {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Hesabın yok mu?{' '}
-            <Link href="/register" className="underline">
+            <Link href="/register" className="font-medium text-primary underline">
               Kayıt ol
             </Link>
           </p>
