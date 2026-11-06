@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { forceSignOutAction } from '@/endpoints/auth/actions';
+import { loadOlderMessagesAction } from '@/endpoints/messages/actions';
+import { Button } from '@/components/ui/button';
 import { useChatRoom } from '@/hooks/use-chat-room';
 import { useRoomMembers } from '@/hooks/use-room-members';
 import { SANCTION_REASON_LABELS } from '@/lib/labels';
@@ -28,6 +30,7 @@ interface ChatWindowProps {
   room: Room;
   currentUser: { id: string; displayName: string; role: UserRole };
   initialMessages: ChatMessage[];
+  initialCursor: string | null;
   initialMembers: RoomMember[];
   readOnly?: boolean;
 }
@@ -36,14 +39,17 @@ export function ChatWindow({
   room,
   currentUser,
   initialMessages,
+  initialCursor,
   initialMembers,
   readOnly = false,
 }: ChatWindowProps) {
   const [notice, setNotice] = useState<string | null>(null);
+  const [cursor, setCursor] = useState(initialCursor);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const members = useRoomMembers(room.id, initialMembers);
 
-  const { messages, connection, send, retry } = useChatRoom(room.id, currentUser, initialMessages, {
+  const { messages, connection, send, retry, prependOlder } = useChatRoom(room.id, currentUser, initialMessages, {
     onSanctionApplied: (sanction: SanctionNotice) => {
       if (sanction.sanction === 'BAN') {
         void forceSignOutAction('AUTH_ACCOUNT_BANNED');
@@ -57,9 +63,24 @@ export function ChatWindow({
     onSanctionRevoked: () => setNotice(null),
   });
 
+  const lastMessageKey = messages.at(-1)?.clientMessageId;
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages.length]);
+  }, [lastMessageKey]);
+
+  const loadOlder = async () => {
+    if (!cursor) {
+      return;
+    }
+    setLoadingOlder(true);
+    try {
+      const page = await loadOlderMessagesAction(room.id, cursor);
+      prependOlder([...page.messages].reverse());
+      setCursor(page.nextCursor);
+    } finally {
+      setLoadingOlder(false);
+    }
+  };
 
   const connectionLabel = CONNECTION_LABELS[connection];
   const seenId = currentUser.role === 'AGENT' ? seenMessageId(messages, members, currentUser.id) : null;
@@ -87,6 +108,18 @@ export function ChatWindow({
         </div>
         {notice && <p className="bg-amber-100 px-4 py-2 text-sm text-amber-900">{notice}</p>}
         <div className="flex flex-1 flex-col gap-3 overflow-y-auto bg-linear-to-b from-transparent to-indigo-50/50 p-4">
+          {cursor && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="self-center"
+              disabled={loadingOlder}
+              onClick={loadOlder}
+            >
+              {loadingOlder ? 'Yükleniyor…' : 'Daha eski mesajları yükle'}
+            </Button>
+          )}
           {messages.length === 0 && (
             <p className="m-auto text-sm text-muted-foreground">Henüz mesaj yok. İlk mesajı sen yaz.</p>
           )}

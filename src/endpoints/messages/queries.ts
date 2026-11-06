@@ -1,8 +1,17 @@
-//Bir odanın son 50 mesajını çeker (GET /rooms/:id/messages)
 import 'server-only';
-import { serverFetch } from '@/lib/api/server-fetch';
-import type { ChatMessage } from '../../types/messages.types';
+import { serverFetchWithMeta } from '@/lib/api/server-fetch';
+import type { ChatMessage, MessagePage } from '../../types/messages.types';
 
-export function getMessageHistory(roomId: string): Promise<ChatMessage[]> {
-  return serverFetch<ChatMessage[]>(`/rooms/${roomId}/messages?limit=50`);
+const PAGE_SIZE = 20;
+
+export async function getMessagePage(roomId: string, cursor?: string): Promise<MessagePage> {
+  const params = new URLSearchParams({ limit: String(PAGE_SIZE) });
+  if (cursor) {
+    params.set('cursor', cursor);
+  }
+  const page = await serverFetchWithMeta<ChatMessage[]>(
+    `/rooms/${encodeURIComponent(roomId)}/messages?${params.toString()}`,
+  );
+  const nextCursor = page.meta?.nextCursor;
+  return { messages: page.data, nextCursor: typeof nextCursor === 'string' ? nextCursor : null };
 }

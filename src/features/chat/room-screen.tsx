@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { getMessageHistory } from '@/endpoints/messages/queries';
+import { getMessagePage } from '@/endpoints/messages/queries';
 import { listProducts } from '@/endpoints/products/queries';
 import { listMyRooms, listRoomMembers } from '@/endpoints/rooms/queries';
 import type { SessionUser } from '@/types/auth.types';
@@ -31,8 +31,8 @@ export async function RoomScreen({
   if (!room) {
     notFound();
   }
-  const [history, members] = await Promise.all([
-    getMessageHistory(room.id),
+  const [page, members] = await Promise.all([
+    getMessagePage(room.id),
     listRoomMembers(room.id),
   ]);
 
@@ -54,7 +54,8 @@ export async function RoomScreen({
           key={room.id}
           room={room}
           currentUser={{ id: user.id, displayName: user.displayName, role: user.role }}
-          initialMessages={[...history].reverse()}
+          initialMessages={[...page.messages].reverse()}
+          initialCursor={page.nextCursor}
           initialMembers={members}
           readOnly={readOnly}
         />

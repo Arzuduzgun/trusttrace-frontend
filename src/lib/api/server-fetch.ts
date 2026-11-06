@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { getAccessToken } from '../auth/cookies';
 import { env } from '../env';
 import { ApiError } from './api-error';
-import type { ApiEnvelope } from '../../types/api-envelope.types';
+import type { ApiEnvelope, ApiSuccess } from '../../types/api-envelope.types';
 import { connection } from 'next/server';
 import { CURRENT_PATH_HEADER } from '../request-headers';
 import { headers } from 'next/dist/server/request/headers';
@@ -73,4 +73,21 @@ export async function serverFetchVoid(path: string, init: RequestInit = {}): Pro
     await redirectIfSessionProblem(error);
     throw error;
   }
+}
+
+export async function serverFetchWithMeta<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<ApiSuccess<T>> {
+  const response = await request(path, init);
+  if (!response.ok) {
+    const error = await toApiError(response);
+    await redirectIfSessionProblem(error);
+    throw error;
+  }
+  const body = (await response.json()) as ApiEnvelope<T>;
+  if (!body.success) {
+    throw new ApiError(response.status, body.error);
+  }
+  return body;
 }

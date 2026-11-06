@@ -153,5 +153,12 @@ export function useChatRoom(
     [emitMessage],
   );
 
-  return { messages, connection, send, retry };
+  const prependOlder = useCallback((older: ChatMessage[]) => {
+    setMessages((list) => {
+      const known = new Set(list.map((message) => message.id));
+      return [...older.filter((message) => !known.has(message.id)), ...list];
+    });
+  }, []);
+
+  return { messages, connection, send, retry, prependOlder };
 }
